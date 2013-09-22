@@ -14,7 +14,7 @@ public class CacheableNode extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -32,5 +32,7 @@ public class CacheableNode extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		Node.addNodeHook(this, "L" + GETTER + ";", cn);
 	}
+
 }

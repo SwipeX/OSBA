@@ -36,8 +36,12 @@ public class Node extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		addNodeHook(this, "L" + GETTER + ";", cn);
+	}
+
+	protected static void addNodeHook (Container container, String desc, ClassNode cn) {
 		/**
-		 * next & previous are found in the remove() method
+		 * 	next & previous are found in the remove() method
 		 *
 		 * 	<Code>
 		 *
@@ -56,15 +60,14 @@ public class Node extends Container {
 		);
 		next.find(cn);
 		fin = (FieldInsnNode) next.get(0).getInstance();
-		String desc = "L" + GETTER + ";";
-		addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
+		container.addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
 		EntryPattern previous = new EntryPattern(
 				new InsnEntry(Opcodes.GETFIELD),
 				new InsnEntry(Opcodes.PUTFIELD)
 		);
 		previous.find(cn);
 		fin = (FieldInsnNode) previous.get(1).getInstance();
-		addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
+		container.addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
 	}
 
 }
