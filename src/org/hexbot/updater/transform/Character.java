@@ -55,7 +55,7 @@ public class Character extends Container {
             addHook("getAnimation", anim.name, anim.owner, anim.owner, anim.desc, -1);
         }
 
-        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.AALOAD));
+        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.RETURN), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.AALOAD));
         ep3.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";I)V");
         FieldInsnNode index = (FieldInsnNode) ep3.get(1).getInstance();
         addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, -1);
