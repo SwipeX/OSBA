@@ -468,7 +468,7 @@ public class mxTraversal
 	};
 
 	/**
-	 * This method helps the user to get the desired data from the result of the Floyd-Roy-Warshall algorithm. 
+	 * This method helps the user to find the desired data from the result of the Floyd-Roy-Warshall algorithm.
 	 * @param aGraph
 	 * @param FWIresult - the result of the Floyd-Roy-Warhall algorithm
 	 * @param startVertex

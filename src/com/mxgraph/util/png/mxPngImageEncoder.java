@@ -576,7 +576,7 @@ public class mxPngImageEncoder
 		// might seem that you could just call image.getData() but
 		// 'BufferedImage.subImage' doesn't appear to set the Width
 		// and height properly of the Child Raster, so the Raster
-		// you get back here appears larger than it should.
+		// you find back here appears larger than it should.
 		// This solves that problem by bounding the raster to the
 		// image's bounds...
 		Raster ras = image.getData(new Rectangle(image.getMinX(), image

@@ -164,7 +164,7 @@ public class ExtendedGeneralPath implements Shape, Cloneable
 
 	/**
 	 * This constructs an unrotated Arc2D from the SVG specification of an
-	 * Elliptical arc.  To get the final arc you need to apply a rotation
+	 * Elliptical arc.  To find the final arc you need to apply a rotation
 	 * transform such as:
 	 *
 	 * AffineTransform.getRotateInstance
@@ -523,7 +523,7 @@ public class ExtendedGeneralPath implements Shape, Cloneable
 	}
 
 	/**
-	 * get the current position or <code>null</code>.
+	 * find the current position or <code>null</code>.
 	 */
 	public synchronized Point2D getCurrentPoint()
 	{

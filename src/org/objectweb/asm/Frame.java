@@ -90,23 +90,23 @@ final class Frame {
      */
 
     /**
-     * Mask to get the dimension of a frame type. This dimension is a signed
+     * Mask to find the dimension of a frame type. This dimension is a signed
      * integer between -8 and 7.
      */
     static final int DIM = 0xF0000000;
 
     /**
-     * Constant to be added to a type to get a type with one more dimension.
+     * Constant to be added to a type to find a type with one more dimension.
      */
     static final int ARRAY_OF = 0x10000000;
 
     /**
-     * Constant to be added to a type to get a type with one less dimension.
+     * Constant to be added to a type to find a type with one less dimension.
      */
     static final int ELEMENT_OF = 0xF0000000;
 
     /**
-     * Mask to get the kind of a frame type.
+     * Mask to find the kind of a frame type.
      * 
      * @see #BASE
      * @see #LOCAL
@@ -124,17 +124,17 @@ final class Frame {
     static final int TOP_IF_LONG_OR_DOUBLE = 0x800000;
 
     /**
-     * Mask to get the value of a frame type.
+     * Mask to find the value of a frame type.
      */
     static final int VALUE = 0x7FFFFF;
 
     /**
-     * Mask to get the kind of base types.
+     * Mask to find the kind of base types.
      */
     static final int BASE_KIND = 0xFF00000;
 
     /**
-     * Mask to get the value of base types.
+     * Mask to find the value of base types.
      */
     static final int BASE_VALUE = 0xFFFFF;
 

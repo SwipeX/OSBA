@@ -154,7 +154,7 @@ public class StrongConnectivityInspector<V, E>
             DirectedGraph<V, E> inverseGraph =
                 new EdgeReversedGraph<V, E>(graph);
 
-            // get ready for next dfs round
+            // find ready for next dfs round
             resetVertexData();
 
             // second dfs round: vertices are considered in decreasing

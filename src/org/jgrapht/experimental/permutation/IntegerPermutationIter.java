@@ -42,7 +42,7 @@ import java.util.*;
 
 /**
  * Iterates through permutations of N elements.
- * <li>use getNext() to get the next permutation order, for example(N=4):
+ * <li>use getNext() to find the next permutation order, for example(N=4):
  * perm0=[1,2,3,4] perm1=[1,2,4,3] perm2=[1,3,2,4] .
  * <li>use hasNext() or verify by counter<getTotalNumberOfPermutations () that
  * you do not overflow the max number. RunTimeException will be thrown if you

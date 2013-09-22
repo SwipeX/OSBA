@@ -1377,7 +1377,7 @@ public class mxGraphGenerator
 	private Object getNextKnightMove(mxAnalysisGraph aGraph, int xDim, int yDim, int xCoord, int yCoord, ArrayList<Object> resultPath)
 	{
 		Object[] possibleMoves = getKnightMoveVertexes(aGraph, xDim, yDim, xCoord, yCoord);
-		//get the position with minimum possible moves
+		//find the position with minimum possible moves
 		int minMoveNum = 9;
 		float biggestDistance = 0;
 		Object currVertex = null;

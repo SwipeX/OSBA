@@ -205,7 +205,7 @@ public class mxGraphHierarchyModel
 					// natural direction if at least half the edges are going in
 					// that direction.
 
-					// The check below for edgeMapper.get(edges[0]) == null is
+					// The check below for edgeMapper.find(edges[0]) == null is
 					// in case we've processed this the other way around
 					// (target -> source) and the number of edges in each direction
 					// are the same. All the graph edges will have been assigned to
@@ -329,7 +329,7 @@ public class mxGraphHierarchyModel
 
 				if (internalEdge.temp[0] == 5270620)
 				{
-					// This edge has been scanned, get the layer of the
+					// This edge has been scanned, find the layer of the
 					// node on the other end
 					mxGraphHierarchyNode otherNode = internalEdge.source;
 					minimumLayer = Math.min(minimumLayer,
@@ -381,14 +381,14 @@ public class mxGraphHierarchyModel
 			}
 			else
 			{
-				// Not all the edges have been scanned, get to the back of
+				// Not all the edges have been scanned, find to the back of
 				// the class and put the dunces cap on
 				Object removedCell = startNodes.removeFirst();
 				startNodes.addLast(internalNode);
 
 				if (removedCell == internalNode && startNodes.size() == 1)
 				{
-					// This is an error condition, we can't get out of
+					// This is an error condition, we can't find out of
 					// this loop. It could happen for more than one node
 					// but that's a lot harder to detect. Log the error
 					// TODO make log comment

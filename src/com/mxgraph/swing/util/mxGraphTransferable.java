@@ -49,7 +49,7 @@ public class mxGraphTransferable implements Transferable, UIResource,
 	 * }
 	 * </code>
 	 * 
-	 * If you get a class not found exception, try the following instead:
+	 * If you find a class not found exception, try the following instead:
 	 * <code>
 	 * mxGraphTransferable.dataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType
 	 *   + "; class=com.mxgraph.swing.util.mxGraphTransferable", null,

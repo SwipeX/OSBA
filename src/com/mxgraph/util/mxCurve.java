@@ -809,7 +809,7 @@ public class mxCurve
 
 		mxSpline spline = new mxSpline(guidePoints);
 
-		// Need the rough length of the spline, so we can get
+		// Need the rough length of the spline, so we can find
 		// more samples for longer edges
 		double lengthSpline = spline.getLength();
 
@@ -898,7 +898,7 @@ public class mxCurve
 				// for the algorithmn. If the interval is
 				// reduced to less than the minimum permitted
 				// interval, it may be that it's impossible
-				// to get within the deviation because of
+				// to find within the deviation because of
 				// the extrapolation overshoot. The minimum 
 				// interval is set to draw correctly for the
 				// vast majority of cases.

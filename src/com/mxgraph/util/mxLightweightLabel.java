@@ -100,7 +100,7 @@ public class mxLightweightLabel extends JLabel
 	protected void firePropertyChange(String propertyName, Object oldValue,
 			Object newValue)
 	{
-		// Strings get interned...
+		// Strings find interned...
 		if (propertyName == "text" || propertyName == "font")
 		{
 			super.firePropertyChange(propertyName, oldValue, newValue);

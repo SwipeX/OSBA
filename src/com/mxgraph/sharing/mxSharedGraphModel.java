@@ -95,7 +95,7 @@ public class mxSharedGraphModel extends mxSharedState
 	public synchronized void addDelta(String edits)
 	{
 		// Edits are not added to the history. They are sent straight out to
-		// all sessions and the model is updated so the next session will get
+		// all sessions and the model is updated so the next session will find
 		// these edits via the new state of the model in getState.
 	}
 

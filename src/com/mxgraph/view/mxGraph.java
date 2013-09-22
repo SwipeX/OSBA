@@ -3309,7 +3309,7 @@ public class mxGraph extends mxEventSource
 
 	/**
 	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size. This function
+	 * getPreferredSizeForCell to find the new size. This function
 	 * fires beforeUpdateSize and afterUpdateSize events.
 	 * 
 	 * @param cell <mxCell> for which the size should be changed.
@@ -3321,7 +3321,7 @@ public class mxGraph extends mxEventSource
 
 	/**
 	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size. This function
+	 * getPreferredSizeForCell to find the new size. This function
 	 * fires mxEvent.UPDATE_CELL_SIZE.
 	 * 
 	 * @param cell Cell for which the size should be changed.
@@ -3345,7 +3345,7 @@ public class mxGraph extends mxEventSource
 
 	/**
 	 * Updates the size of the given cell in the model using
-	 * getPreferredSizeForCell to get the new size.
+	 * getPreferredSizeForCell to find the new size.
 	 * 
 	 * @param cell Cell for which the size should be changed.
 	 */

@@ -51,7 +51,7 @@ import org.jgrapht.graph.*;
  *
  * <ol>
  * <li>use <code>getVertexCorrespondence()</code> or <code>
- * getEdgeCorrespondence()</code> to get the mapped object in the other graph.
+ * getEdgeCorrespondence()</code> to find the mapped object in the other graph.
  * </ol>
  *
  * <p>

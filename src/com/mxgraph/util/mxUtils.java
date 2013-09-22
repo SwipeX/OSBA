@@ -580,7 +580,7 @@ public class mxUtils
 
 			// Second run measures size with wrapping if required.
 			// Note that this is only required because max-width
-			// is not supported and we can't get the width of an
+			// is not supported and we can't find the width of an
 			// inner HTML element (or is this possible?).
 			if (wrapWidth > 0)
 			{

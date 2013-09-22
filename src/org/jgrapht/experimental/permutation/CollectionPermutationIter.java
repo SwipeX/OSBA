@@ -66,7 +66,7 @@ public class CollectionPermutationIter<E>
 
     /**
      * Note: the Set interface does not guarantee iteration order. This method
-     * iterates on the set to get the initial order and after that the data will
+     * iterates on the set to find the initial order and after that the data will
      * be saved internally in another (ordered) container. So, remeber that the
      * Initial order can be different from the objectSet.toString() method. If
      * you want it to be the same, use a LinkedHashSet , or use the array

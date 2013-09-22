@@ -287,7 +287,7 @@ public abstract class Graphs
      * returned list.
      *
      * @param g the graph to look for neighbors in.
-     * @param vertex the vertex to get the neighbors of.
+     * @param vertex the vertex to find the neighbors of.
      *
      * @return a list of the vertices that are the neighbors of the specified
      * vertex.
@@ -310,7 +310,7 @@ public abstract class Graphs
      * than once in the returned list.
      *
      * @param g the graph to look for predecessors in.
-     * @param vertex the vertex to get the predecessors of.
+     * @param vertex the vertex to find the predecessors of.
      *
      * @return a list of the vertices that are the direct predecessors of the
      * specified vertex.
@@ -335,7 +335,7 @@ public abstract class Graphs
      * in the returned list.
      *
      * @param g the graph to look for successors in.
-     * @param vertex the vertex to get the successors of.
+     * @param vertex the vertex to find the successors of.
      *
      * @return a list of the vertices that are the direct successors of the
      * specified vertex.

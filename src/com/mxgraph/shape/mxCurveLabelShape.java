@@ -457,7 +457,7 @@ public class mxCurveLabelShape implements mxITextShape
 			// Hook for sub-classers
 			postprocessGlyph(curve, label, j, currentPos);
 
-			// Need to allow for text on inside of curve bends. Need to get the 
+			// Need to allow for text on inside of curve bends. Need to find the
 			// parallel for the next section, if there is an excessive
 			// inner curve, advance the current position accordingly
 

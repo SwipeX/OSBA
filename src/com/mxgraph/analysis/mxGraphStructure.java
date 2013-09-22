@@ -73,7 +73,7 @@ public class mxGraphStructure
 
 			for (int j = 0; j < neighborVertices.length; j++)
 			{
-				//get the index of the neighbor vertex
+				//find the index of the neighbor vertex
 				int index = 0;
 
 				for (int k = 0; k < vertexNum; k++)

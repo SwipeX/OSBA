@@ -1280,7 +1280,7 @@ public class GeneratorAdapter extends LocalVariablesSorter {
     // ------------------------------------------------------------------------
 
     /**
-     * Generates a get field or set field instruction.
+     * Generates a find field or set field instruction.
      * 
      * @param opcode
      *            the instruction's opcode.
@@ -1573,7 +1573,7 @@ public class GeneratorAdapter extends LocalVariablesSorter {
     }
 
     /**
-     * Generates the instruction to get the monitor of the top stack value.
+     * Generates the instruction to find the monitor of the top stack value.
      */
     public void monitorEnter() {
         mv.visitInsn(Opcodes.MONITORENTER);

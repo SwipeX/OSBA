@@ -1031,7 +1031,7 @@ public class mxEdgeStyle
 					int nextDirection = routePattern[i] & 0xF;
 
 					// Rotate the index of this direction by the quad
-					// to get the real direction
+					// to find the real direction
 					int directionIndex = nextDirection == mxConstants.DIRECTION_MASK_EAST ? 3 : nextDirection;
 
 					directionIndex += quad;

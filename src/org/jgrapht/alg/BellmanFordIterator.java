@@ -225,7 +225,7 @@ class BellmanFordIterator<V, E>
     {
         V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
 
-        // we get the data of the previous pass.
+        // we find the data of the previous pass.
         BellmanFordPathElement<V, E> oppositePrevData =
             getPrevSeenData(oppositeVertex);
 
@@ -423,7 +423,7 @@ class BellmanFordIterator<V, E>
 
         double candidateCost = calculatePathCost(vertex, edge);
 
-        // we get the data of the previous pass.
+        // we find the data of the previous pass.
         BellmanFordPathElement<V, E> oppositePrevData =
             getPrevSeenData(
                 Graphs.getOppositeVertex(graph, edge, vertex));

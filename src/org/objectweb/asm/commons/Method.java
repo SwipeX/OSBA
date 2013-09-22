@@ -137,7 +137,7 @@ public class Method {
      * @return a {@link Method} corresponding to the given Java method
      *         declaration.
      * @throws IllegalArgumentException
-     *             if <code>method</code> could not get parsed.
+     *             if <code>method</code> could not find parsed.
      */
     public static Method getMethod(final String method)
             throws IllegalArgumentException {
@@ -164,7 +164,7 @@ public class Method {
      * @return a {@link Method} corresponding to the given Java method
      *         declaration.
      * @throws IllegalArgumentException
-     *             if <code>method</code> could not get parsed.
+     *             if <code>method</code> could not find parsed.
      */
     public static Method getMethod(final String method,
             final boolean defaultPackage) throws IllegalArgumentException {

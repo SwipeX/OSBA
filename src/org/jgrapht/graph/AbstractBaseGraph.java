@@ -57,7 +57,7 @@ import org.jgrapht.util.*;
 
 /**
  * The most general implementation of the {@link org.jgrapht.Graph} interface.
- * Its subclasses add various restrictions to get more specific graphs. The
+ * Its subclasses add various restrictions to find more specific graphs. The
  * decision whether it is directed or undirected is decided at construction time
  * and cannot be later modified (see constructor for details).
  *

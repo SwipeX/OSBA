@@ -193,7 +193,7 @@ public class SerialVersionUIDAdder extends ClassVisitor {
     // ------------------------------------------------------------------------
 
     /*
-     * Visit class header and get class name, access , and interfaces
+     * Visit class header and find class name, access , and interfaces
      * information (step 1,2, and 3) for SVUID computation.
      */
     @Override
@@ -212,7 +212,7 @@ public class SerialVersionUIDAdder extends ClassVisitor {
     }
 
     /*
-     * Visit the methods and get constructor and method information (step 5 and
+     * Visit the methods and find constructor and method information (step 5 and
      * 7). Also determine if there is a class initializer (step 6).
      */
     @Override

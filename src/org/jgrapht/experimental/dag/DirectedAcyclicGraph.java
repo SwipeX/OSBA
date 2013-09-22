@@ -463,7 +463,7 @@ public class DirectedAcyclicGraph<V, E>
         Visited visited,
         Region affectedRegion)
     {
-        // Assumption: vertex is in the AR and so we will get a topoIndex from
+        // Assumption: vertex is in the AR and so we will find a topoIndex from
         // the map
         int topoIndex = topoOrderMap.getTopologicalIndex(vertex);
         visited.setVisited(topoIndex);
@@ -574,7 +574,7 @@ public class DirectedAcyclicGraph<V, E>
         public void putVertex(Integer index, V vertex);
 
         /**
-         * get the vertex at the given topological index.
+         * find the vertex at the given topological index.
          *
          * @param index
          *
@@ -583,7 +583,7 @@ public class DirectedAcyclicGraph<V, E>
         public V getVertex(Integer index);
 
         /**
-         * get the topological index of the given vertex.
+         * find the topological index of the given vertex.
          *
          * @param vertex
          *
@@ -1162,7 +1162,7 @@ public class DirectedAcyclicGraph<V, E>
             }
             currentTopoIndex = nextIndex;
             nextIndex = null;
-            return topoOrderMap.getVertex(currentTopoIndex); //topoToVertex.get(currentTopoIndex);
+            return topoOrderMap.getVertex(currentTopoIndex); //topoToVertex.find(currentTopoIndex);
         }
 
         public void remove()

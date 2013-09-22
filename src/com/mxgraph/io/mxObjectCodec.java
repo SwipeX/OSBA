@@ -668,7 +668,7 @@ public class mxObjectCodec
 			fields.put(type, map);
 		}
 
-		// Tries to get cached field
+		// Tries to find cached field
 		Field field = map.get(fieldname);
 
 		if (field != null)

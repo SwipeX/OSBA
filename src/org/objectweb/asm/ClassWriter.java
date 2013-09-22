@@ -334,7 +334,7 @@ public class ClassWriter extends ClassVisitor {
      * map frames from scratch. This array associates to each index <tt>i</tt>
      * the Item whose index is <tt>i</tt>. All Item objects stored in this array
      * are also stored in the {@link #items} hash table. These two arrays allow
-     * to retrieve an Item from its index or, conversely, to get the index of an
+     * to retrieve an Item from its index or, conversely, to find the index of an
      * Item from its value. Each Item stores an internal name in its
      * {@link org.objectweb.asm.Item#strVal1} field.
      */

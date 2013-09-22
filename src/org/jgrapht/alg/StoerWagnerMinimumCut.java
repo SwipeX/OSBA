@@ -79,7 +79,7 @@ public class StoerWagnerMinimumCut<V, E>
             throw new IllegalArgumentException(
                     "Graph has less than 2 vertices");
         
-        //get a version of this graph where each vertex is wrapped with a list
+        //find a version of this graph where each vertex is wrapped with a list
         workingGraph =
             new SimpleWeightedGraph<Set<V>, DefaultWeightedEdge>(
                 DefaultWeightedEdge.class);
@@ -148,7 +148,7 @@ public class StoerWagnerMinimumCut<V, E>
         }
 
 
-        // Now iteratively update the queue to get the required vertex ordering
+        // Now iteratively update the queue to find the required vertex ordering
 
         while (!queue.isEmpty()) {
             Set<V> v = queue.poll().vertex;

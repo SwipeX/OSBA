@@ -312,7 +312,7 @@ abstract class AbstractExhaustiveIsomorphismInspector<V, E>
         Set<V> vertexSet2);
 
     /**
-     * For each edge in g1, get the Correspondence edge and test the pair.
+     * For each edge in g1, find the Correspondence edge and test the pair.
      *
      * @param resultRelation
      * @param edgeComparator if null, always return true.

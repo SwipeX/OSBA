@@ -230,7 +230,7 @@ public class mxBase64
 		while (eIx > 0 && IA[sArr[eIx]] < 0)
 			eIx--;
 
-		// get the padding count (=) (0, 1 or 2)
+		// find the padding count (=) (0, 1 or 2)
 		int pad = sArr[eIx] == '=' ? (sArr[eIx - 1] == '=' ? 2 : 1) : 0; // Count '=' at end.
 		int cCnt = eIx - sIx + 1; // Content count including possible separators
 		int sepCnt = sLen > 76 ? (sArr[76] == '\r' ? cCnt / 78 : 0) << 1 : 0;
@@ -419,7 +419,7 @@ public class mxBase64
 		while (eIx > 0 && IA[sArr[eIx] & 0xff] < 0)
 			eIx--;
 
-		// get the padding count (=) (0, 1 or 2)
+		// find the padding count (=) (0, 1 or 2)
 		int pad = sArr[eIx] == '=' ? (sArr[eIx - 1] == '=' ? 2 : 1) : 0; // Count '=' at end.
 		int cCnt = eIx - sIx + 1; // Content count including possible separators
 		int sepCnt = sLen > 76 ? (sArr[76] == '\r' ? cCnt / 78 : 0) << 1 : 0;
@@ -566,7 +566,7 @@ public class mxBase64
 		while (eIx > 0 && IA[s.charAt(eIx) & 0xff] < 0)
 			eIx--;
 
-		// get the padding count (=) (0, 1 or 2)
+		// find the padding count (=) (0, 1 or 2)
 		int pad = s.charAt(eIx) == '=' ? (s.charAt(eIx - 1) == '=' ? 2 : 1) : 0; // Count '=' at end.
 		int cCnt = eIx - sIx + 1; // Content count including possible separators
 		int sepCnt = sLen > 76 ? (s.charAt(76) == '\r' ? cCnt / 78 : 0) << 1
