@@ -36,11 +36,11 @@ public class Character extends Container {
 
     @Override
     public void transform(ClassNode cn) {
-        EntryPattern ep = new EntryPattern(new InsnEntry[]{new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I"),
-                new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I")});
+        EntryPattern ep = new EntryPattern(new InsnEntry[]{new InsnEntry(Opcodes.GETFIELD, "[I"), new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I"),
+                new InsnEntry(Opcodes.GETFIELD, "[I"), new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN)});
         ep.find(cn);
-        FieldInsnNode x = (FieldInsnNode) ep.get(1).getInstance();
-        FieldInsnNode y = (FieldInsnNode) ep.get(3).getInstance();
+        FieldInsnNode x = (FieldInsnNode) ep.get(2).getInstance();
+        FieldInsnNode y = (FieldInsnNode) ep.get(5).getInstance();
         addHook("getX", x.name, x.owner, x.owner, x.desc, -1);
         addHook("getY", y.name, y.owner, y.owner, y.desc, -1);
 
@@ -49,10 +49,11 @@ public class Character extends Container {
         FieldInsnNode text = (FieldInsnNode) ep1.get(1).getInstance();
         addHook("getAboveText", text.name, text.owner, text.owner, text.desc, -1);
 
-        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "[I"));
-        ep2.find(cn);
-        FieldInsnNode anim = (FieldInsnNode) ep2.get(1).getInstance();
-        addHook("getAnimation", anim.name, anim.owner, anim.owner, anim.desc, -1);
+        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.IF_ICMPNE), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "[I"));
+        if (ep2.find(cn)) {
+            FieldInsnNode anim = (FieldInsnNode) ep2.get(1).getInstance();
+            addHook("getAnimation", anim.name, anim.owner, anim.owner, anim.desc, -1);
+        }
 
         EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.AALOAD));
         ep3.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";I)V");
