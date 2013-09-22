@@ -29,7 +29,7 @@ public class EntryPattern {
 
     public boolean find(ClassNode classNode, String desc) {
         for (MethodNode mn : classNode.methods) {
-            if (!mn.desc.equals(desc) && find(mn))
+            if (mn.desc.equals(desc) && find(mn))
                 return true;
         }
         return false;
