@@ -32,6 +32,9 @@ public class CacheableNode extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		/**
+		 * Remove method is identical to Node
+		 */
 		Node.addNodeHook(this, "L" + GETTER + ";", cn);
 	}
 

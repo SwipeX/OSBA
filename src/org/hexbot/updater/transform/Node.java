@@ -39,6 +39,9 @@ public class Node extends Container {
 		addNodeHook(this, "L" + GETTER + ";", cn);
 	}
 
+	/**
+	 * For convenience when hooking CacheableNode
+	 */
 	protected static void addNodeHook (Container container, String desc, ClassNode cn) {
 		/**
 		 * 	next & previous are found in the remove() method
