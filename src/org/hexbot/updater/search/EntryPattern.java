@@ -28,6 +28,18 @@ public class EntryPattern {
         return ain;
     }
 
+    public AbstractInsnNode[] find(ClassNode classNode, String desc) {
+        AbstractInsnNode[] ain = null;
+        for (MethodNode mn : classNode.methods) {
+            if (!mn.desc.equals(desc))
+                continue;
+            ain = find(mn);
+            if (ain == null)
+                continue;
+        }
+        return ain;
+    }
+
     public AbstractInsnNode[] find(MethodNode methodNode) {
         LinkedList<AbstractInsnNode> nodes = new LinkedList<>();
         InsnEntry first = entries[0];
@@ -35,7 +47,7 @@ public class EntryPattern {
         for (AbstractInsnNode ain : methodNode.instructions.toArray()) {
             if (first.equals(ain)) {
                 first.setInstance(ain);
-               // nodes.add(ain);
+                // nodes.add(ain);
                 for (int i = 1; i < entries.length; i++) {
                     InsnEntry ie = entries[i];
                     AbstractInsnNode found = ASMUtil.getNext(ain, ie.opcode);

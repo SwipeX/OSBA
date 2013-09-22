@@ -1,4 +1,4 @@
-package org.hexbot.updater.transform;
+package org.hexbot.updater.transform.parent;
 
 import org.hexbot.updater.Updater;
 import org.objectweb.asm.tree.ClassNode;
@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public abstract class Container extends Transform {
 
@@ -14,6 +15,7 @@ public abstract class Container extends Transform {
 	public final String GETTER = GETTER_PREFIX + getClass().getSimpleName();
 
 	public static final Map<String, String> CLASS_MATCHES = new HashMap<>();
+    public final Vector<Hook> hooks = new Vector();
 
 	protected Updater updater;
 
@@ -67,4 +69,9 @@ public abstract class Container extends Transform {
 	public final int getHookSuccessCount() {
 		return successful;
 	}
+    public void addHook(String name, String field,String clazz,String toInject,String desc,int mult){
+        hooks.add(new Hook(name,field,clazz,toInject,desc,mult));
+        System.out.println(" <><>-> "+name+"() = "+clazz+"."+field+" ["+desc+"]");
+        successful++;
+    }
 }

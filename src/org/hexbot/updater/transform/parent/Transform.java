@@ -1,4 +1,4 @@
-package org.hexbot.updater.transform;
+package org.hexbot.updater.transform.parent;
 
 import org.objectweb.asm.tree.ClassNode;
 

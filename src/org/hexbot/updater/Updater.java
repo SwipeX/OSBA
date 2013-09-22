@@ -2,13 +2,15 @@ package org.hexbot.updater;
 
 import org.hexbot.updater.transform.*;
 import org.hexbot.updater.transform.Character;
+import org.hexbot.updater.transform.parent.Container;
+import org.hexbot.updater.transform.parent.Transform;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.util.*;
 
 public class Updater implements Runnable {
 
-	private final Map<String, ClassNode> classnodes;
+	public final Map<String, ClassNode> classnodes;
 
 	public final Transform[] transforms = {new Node(this), new CacheableNode(this), new NodeDeque(this),
 			new CacheableNodeDeque(this), new NodeHashTable(this), new NodeCache(this), new Friend(this),

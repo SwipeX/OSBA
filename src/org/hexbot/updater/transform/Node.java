@@ -1,5 +1,6 @@
 package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.util.Map;

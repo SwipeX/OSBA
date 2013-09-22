@@ -3,8 +3,8 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 
@@ -18,7 +18,7 @@ public class Character extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 1;
+        return 5;
     }
 
     @Override
@@ -41,7 +41,27 @@ public class Character extends Container {
         ep.find(cn);
         FieldInsnNode x = (FieldInsnNode) ep.get(1).getInstance();
         FieldInsnNode y = (FieldInsnNode) ep.get(3).getInstance();
-        System.out.println("az." + x.name);
-        System.out.println("az." + y.name);
+        addHook("getX", x.name, x.owner, x.owner, x.desc, -1);
+        addHook("getY", y.name, y.owner, y.owner, y.desc, -1);
+
+        EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.ACONST_NULL), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));
+        ep1.find(cn);
+        FieldInsnNode text = (FieldInsnNode) ep1.get(1).getInstance();
+        addHook("getAboveText", text.name, text.owner, text.owner, text.desc, -1);
+
+        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "[I"));
+        ep2.find(cn);
+        FieldInsnNode anim = (FieldInsnNode) ep2.get(1).getInstance();
+        addHook("getAnimation", anim.name, anim.owner, anim.owner, anim.desc, -1);
+
+        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.AALOAD));
+        ep3.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";I)V");
+        FieldInsnNode index = (FieldInsnNode) ep3.get(1).getInstance();
+        addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, -1);
+
+        EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN));
+        ep4.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";)V");
+        FieldInsnNode orientaion = (FieldInsnNode) ep4.get(0).getInstance();
+        addHook("getOrientation", orientaion.name, orientaion.owner, CLASS_MATCHES.get("Character"), orientaion.desc, -1);
     }
 }

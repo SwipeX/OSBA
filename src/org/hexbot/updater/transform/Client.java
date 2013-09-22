@@ -1,13 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
-import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 1;
+        return 0;
     }
 
     @Override

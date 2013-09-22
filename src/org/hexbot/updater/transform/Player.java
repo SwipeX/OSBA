@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -43,7 +44,7 @@ public class Player extends Container {
             if (ain == null)
                 continue;
             FieldInsnNode name = (FieldInsnNode) ep.get(1).getInstance();
-            System.out.println("P name: "+name.owner+"."+name.name);
+            addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
             break;
         }
     }
