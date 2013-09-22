@@ -20,7 +20,7 @@ public class Player extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -40,9 +40,7 @@ public class Player extends Container {
     public void transform(ClassNode cn) {
         EntryPattern ep = new EntryPattern(new InsnEntry[]{new InsnEntry(Opcodes.ALOAD), new InsnEntry(Opcodes.GETFIELD, "Ljava/lang/String;"), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;")});
         for (MethodNode mn : cn.methods) {
-            AbstractInsnNode[] ain = ep.find(mn);
-            if (ain == null)
-                continue;
+            ep.find(mn);
             FieldInsnNode name = (FieldInsnNode) ep.get(1).getInstance();
             addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
             break;
