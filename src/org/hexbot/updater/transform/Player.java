@@ -41,7 +41,7 @@ public class Player extends Container {
         EntryPattern ep = new EntryPattern(new InsnEntry[]{new InsnEntry(Opcodes.ALOAD), new InsnEntry(Opcodes.GETFIELD, "Ljava/lang/String;"), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;")});
         for (MethodNode mn : cn.methods) {
             ep.find(mn);
-            FieldInsnNode name = (FieldInsnNode) ep.get(1).getInstance();
+            FieldInsnNode name = ep.get(1, FieldInsnNode.class);
             addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
             break;
         }

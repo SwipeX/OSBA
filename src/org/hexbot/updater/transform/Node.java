@@ -60,12 +60,12 @@ public class Node extends Container {
 		EntryPattern next = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.IFNONNULL)
 		);
 		if (next.find(cn)) {
-			fin = (FieldInsnNode) next.get(0).getInstance();
+			fin = next.get(0, FieldInsnNode.class);
 			container.addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
 			EntryPattern previous = new EntryPattern(new InsnEntry(Opcodes.GETFIELD),new InsnEntry(Opcodes.PUTFIELD)
 			);
 			if (previous.find(cn)) {
-				fin = (FieldInsnNode) previous.get(1).getInstance();
+				fin = previous.get(1, FieldInsnNode.class);
 				container.addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
 			}
 		}

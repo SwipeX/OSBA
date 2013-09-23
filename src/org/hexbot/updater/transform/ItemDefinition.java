@@ -39,11 +39,11 @@ public class ItemDefinition extends Container {
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "Ljava/lang/String;"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;")
                 ,new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"),new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
         if (ep1.find(cn)) {
-            FieldInsnNode name = (FieldInsnNode) ep1.get(1).getInstance();
+            FieldInsnNode name = ep1.get(1, FieldInsnNode.class);
             addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
-            FieldInsnNode actions = (FieldInsnNode) ep1.get(2).getInstance();
+            FieldInsnNode actions = ep1.get(2, FieldInsnNode.class);
             addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
-            FieldInsnNode groundActions = (FieldInsnNode) ep1.get(3).getInstance();
+            FieldInsnNode groundActions = ep1.get(3, FieldInsnNode.class);
             addHook("getGroundActions", groundActions.name, groundActions.owner, groundActions.owner, groundActions.desc, -1);
         }
     }

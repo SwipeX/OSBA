@@ -36,13 +36,13 @@ public class ObjectDefinition extends Container {
 	public void transform(ClassNode cn) {
         EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.LDC, "null"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));
         if (ep2.find(cn)) {
-            FieldInsnNode name = (FieldInsnNode) ep2.get(1).getInstance();
+            FieldInsnNode name = ep2.get(1, FieldInsnNode.class);
             addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
         }
 
         EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.ANEWARRAY), new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
         if (ep3.find(cn)) {
-            FieldInsnNode actions = (FieldInsnNode) ep3.get(1).getInstance();
+            FieldInsnNode actions = ep3.get(1, FieldInsnNode.class);
             addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
         }
 	}

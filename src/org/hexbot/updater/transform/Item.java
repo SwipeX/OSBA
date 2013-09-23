@@ -39,9 +39,9 @@ public class Item extends Container {
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.INVOKESTATIC),
                 new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.ARETURN));
         if (ep1.find(cn)) {
-            FieldInsnNode id = (FieldInsnNode) ep1.get(0).getInstance();
+            FieldInsnNode id = ep1.get(0, FieldInsnNode.class);
             addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
-            FieldInsnNode stack = (FieldInsnNode) ep1.get(2).getInstance();
+            FieldInsnNode stack = ep1.get(2, FieldInsnNode.class);
             addHook("getStackSize", stack.name, stack.owner, stack.owner, stack.desc, -1);
         }
     }

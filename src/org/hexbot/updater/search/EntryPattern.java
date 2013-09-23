@@ -60,7 +60,7 @@ public class EntryPattern {
     }
 
 	public <T> T get(int index, Class<T> clazz) {
-		return clazz.cast(get(index).getInstance());
+		return (T) get(index).getInstance();
 	}
 
 	public InsnEntry[] getEntries() {

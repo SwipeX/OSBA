@@ -46,10 +46,10 @@ public class Client extends Container {
 					new InsnEntry(Opcodes.LDC, ""), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;"), // password
 					new InsnEntry(Opcodes.ICONST_0), new InsnEntry(Opcodes.PUTSTATIC, "Z")); // logged in
 			if (pattern.find(cn)) {
-				FieldInsnNode loginIndex = (FieldInsnNode) pattern.get(1).getInstance();
-				FieldInsnNode username = (FieldInsnNode) pattern.get(3).getInstance();
-				FieldInsnNode password = (FieldInsnNode) pattern.get(5).getInstance();
-				FieldInsnNode loggedIn = (FieldInsnNode) pattern.get(7).getInstance();
+				FieldInsnNode loginIndex = pattern.get(1, FieldInsnNode.class);
+				FieldInsnNode username = pattern.get(3, FieldInsnNode.class);
+				FieldInsnNode password = pattern.get(5, FieldInsnNode.class);
+				FieldInsnNode loggedIn = pattern.get(7, FieldInsnNode.class);
 				addHook("getLoginIndex", loginIndex.name, loginIndex.owner, "client", "I", -1);
 				addHook("getUsername", username.name, username.owner, "client", "Ljava/lang/String;", -1);
 				addHook("getPassword", password.name, password.owner, "client", "Ljava/lang/String;", -1);

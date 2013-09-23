@@ -36,12 +36,12 @@ public class PlayerDefinition extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-        EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETFIELD,"[I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
-        if (ep.find(cn)) {
-            FieldInsnNode ids = (FieldInsnNode) ep.get(0).getInstance();
-            addHook("getAppearanceIds", ids.name, ids.owner, ids.owner, ids.desc, -1);
-            FieldInsnNode idx = (FieldInsnNode) ep.get(1).getInstance();
-            addHook("getAppearanceIndices", idx.name, idx.owner, idx.owner, idx.desc, -1);
-        }
+		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "[I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
+		if (ep.find(cn)) {
+			FieldInsnNode ids = ep.get(0, FieldInsnNode.class);
+			addHook("getAppearanceIds", ids.name, ids.owner, ids.owner, ids.desc, -1);
+			FieldInsnNode idx = ep.get(1, FieldInsnNode.class);
+			addHook("getAppearanceIndices", idx.name, idx.owner, idx.owner, idx.desc, -1);
+		}
 	}
 }
