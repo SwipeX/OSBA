@@ -1,8 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Map;
 
@@ -14,7 +18,7 @@ public class ObjectDefinition extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -30,5 +34,16 @@ public class ObjectDefinition extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.LDC, "null"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));
+        if (ep2.find(cn)) {
+            FieldInsnNode name = (FieldInsnNode) ep2.get(1).getInstance();
+            addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
+        }
+
+        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.ANEWARRAY), new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
+        if (ep3.find(cn)) {
+            FieldInsnNode actions = (FieldInsnNode) ep3.get(1).getInstance();
+            addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
+        }
 	}
 }

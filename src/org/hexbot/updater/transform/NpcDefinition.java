@@ -18,7 +18,7 @@ public class NpcDefinition extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 1;
+        return 4;
     }
 
     @Override
