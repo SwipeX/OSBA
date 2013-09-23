@@ -71,4 +71,9 @@ public abstract class Container extends Transform {
         System.out.println(" <" + getClass().getSimpleName() + "><>-> " + name + "() = " + clazz + "." + field + " (" + desc + ")");
         successful++;
     }
+
+	public Updater getUpdater() {
+		return updater;
+	}
+
 }

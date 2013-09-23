@@ -58,4 +58,9 @@ public class EntryPattern {
     public InsnEntry get(int index) {
         return entries[index];
     }
+
+	public InsnEntry[] getEntries() {
+		return entries;
+	}
+
 }

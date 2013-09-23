@@ -33,5 +33,9 @@ public class Friend extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		/**
+		 * We Have No Friends
+		 */
 	}
+
 }
