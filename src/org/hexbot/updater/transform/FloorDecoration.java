@@ -1,8 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Map;
 
@@ -14,7 +18,7 @@ public class FloorDecoration extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 1;
 	}
 	
 	@Override
@@ -37,5 +41,11 @@ public class FloorDecoration extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+        ClassNode region = updater.classnodes.get(CLASS_MATCHES.get("Region"));
+        EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "L" + cn.name + ";"), new InsnEntry(Opcodes.GETFIELD, "I"));
+        if (ep1.find(region, "(III)I")) {
+            FieldInsnNode id = (FieldInsnNode) ep1.get(1).getInstance();
+            addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
+        }
 	}
 }
