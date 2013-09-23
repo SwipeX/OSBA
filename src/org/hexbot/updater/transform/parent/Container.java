@@ -68,7 +68,6 @@ public abstract class Container extends Transform {
 
     public void addHook(String name, String field, String clazz, String toInject, String desc, int mult) {
         hooks.add(new Hook(name, field, clazz, toInject, desc, mult));
-        System.out.println(" <" + getClass().getSimpleName() + "><>-> " + name + "() = " + clazz + "." + field + " (" + desc + ")");
         successful++;
     }
 

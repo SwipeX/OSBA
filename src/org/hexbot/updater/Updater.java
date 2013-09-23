@@ -3,10 +3,12 @@ package org.hexbot.updater;
 import org.hexbot.updater.transform.*;
 import org.hexbot.updater.transform.Character;
 import org.hexbot.updater.transform.parent.Container;
+import org.hexbot.updater.transform.parent.Hook;
 import org.hexbot.updater.transform.parent.Transform;
 import org.objectweb.asm.tree.ClassNode;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Updater implements Runnable {
 
@@ -46,7 +48,7 @@ public class Updater implements Runnable {
 			}
 		}
 		long end = System.currentTimeMillis();
-		System.out.println("Identified "+ classes + "/" + totalClasses + " classes in " + (end - start) + "ms");
+		System.out.println("Identified " + classes + "/" + totalClasses + " classes in " + (end - start) + "ms");
 		start = System.currentTimeMillis();
 		for (Container container : containers.values()) {
 			if (container.getTotalHookCount() == 0) continue;
@@ -58,7 +60,16 @@ public class Updater implements Runnable {
 		System.out.println("Identified " + fields + "/" + totalFields + " fields in " + (end - start) + "ms");
 		System.out.println();
 		for (Map.Entry<String, Container> entry : containers.entrySet()) {
-			System.out.println(entry.getKey() + " := " + entry.getValue().cn.name);
+			String key = entry.getKey();
+			ClassNode node = entry.getValue().cn;
+			System.out.println(String.format(" > %s identified as '%s'", key, node == null ? "null" : node.name));
+			for (Hook hook : entry.getValue().hooks) {
+				String s = String.format("%s.%s() %s returns %s.%s", hook.toInject, hook.name, hook.desc, hook.clazz, hook.field);
+				if (hook.multiplier != -1)
+					s += " * " + hook.multiplier;
+				System.out.println(" ^ " + s);
+			}
+			System.out.println();
 		}
 	}
 
