@@ -38,6 +38,7 @@ public class Client extends Container {
 	}
 
 	private void logoutHooks() {
+		// void logout()
 		for (ClassNode cn : getUpdater().classnodes.values()) {
 			EntryPattern pattern = new EntryPattern(
 					new InsnEntry(Opcodes.ICONST_0), new InsnEntry(Opcodes.PUTSTATIC, "I"), //login index
@@ -53,6 +54,7 @@ public class Client extends Container {
 				addHook("getUsername", username.name, username.owner, "client", "Ljava/lang/String;", -1);
 				addHook("getPassword", password.name, password.owner, "client", "Ljava/lang/String;", -1);
 				addHook("isLoggedIn", loggedIn.name, loggedIn.owner, "client", "Z", -1);
+				break;
 			}
 		}
 	}
