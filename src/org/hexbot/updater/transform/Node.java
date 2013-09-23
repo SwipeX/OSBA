@@ -57,17 +57,19 @@ public class Node extends Container {
 		 *
 		 */
 		FieldInsnNode fin;
-		EntryPattern next = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.IFNONNULL)
-		);
-		if (next.find(cn)) {
-			fin = next.get(0, FieldInsnNode.class);
-			container.addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
-			EntryPattern previous = new EntryPattern(new InsnEntry(Opcodes.GETFIELD),new InsnEntry(Opcodes.PUTFIELD)
-			);
-			if (previous.find(cn)) {
-				fin = previous.get(1, FieldInsnNode.class);
-				container.addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
-			}
+		EntryPattern next = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.IFNONNULL));
+		//TODO fix patterns
+		//idk wtf is happening here, it returns false even though the pattern is found.
+		//if i remove the if boxing it works fine
+		//if (next.find(cn)) {
+		next.find(cn);
+		fin = next.get(0, FieldInsnNode.class);
+		container.addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
+		//}
+		EntryPattern previous = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.PUTFIELD));
+		if (previous.find(cn)) {
+			fin = previous.get(1, FieldInsnNode.class);
+			container.addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
 		}
 	}
 
