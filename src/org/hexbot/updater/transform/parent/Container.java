@@ -11,67 +11,64 @@ import java.util.Vector;
 
 public abstract class Container extends Transform {
 
-	public final String GETTER_PREFIX = "org/hexbot/core/impl/";
-	public final String GETTER = GETTER_PREFIX + getClass().getSimpleName();
-
-	public static final Map<String, String> CLASS_MATCHES = new HashMap<>();
+    public static final Map<String, String> CLASS_MATCHES = new HashMap<>();
+    public final String GETTER_PREFIX = "org/hexbot/core/impl/";
+    public final String GETTER = GETTER_PREFIX + getClass().getSimpleName();
     public final Vector<Hook> hooks = new Vector();
+    public ClassNode cn = null;
+    protected Updater updater;
+    protected int successful = 0;
 
-	protected Updater updater;
+    public Container(Updater updater) {
+        this.updater = updater;
+    }
 
-	protected int successful = 0;
+    public String getInterfaceString() {
+        return GETTER;
+    }
 
-	public ClassNode cn = null;
-	
-	public String getInterfaceString() {
-		return GETTER;
-	}
-	
-	public String getName(ClassNode cn) {
-		return cn != null ? cn.name : null;
-	}
-	
-	public FieldNode getField(ClassNode cn, String name, String desc, boolean ignoreStatic) {
-		if (cn != null) {
-			return cn.getField(name, desc, ignoreStatic);
-		}
-		return null;
-	}
-	
-	public FieldNode getField(ClassNode cn, String name, String desc) {
-		return getField(cn, name, desc, true);
-	}
-	
-	public FieldNode getPublicField(ClassNode cn, String name, String desc) {
-		if (cn != null) {
-			return cn.getPublicField(name, desc);
-		}
-		return null;
-	}
-	
-	public MethodNode getMethod(ClassNode cn, String desc) {
-		if (cn != null) {
-			return cn.getMethod(desc);
-		}
-		return null;
-	}
+    public String getName(ClassNode cn) {
+        return cn != null ? cn.name : null;
+    }
 
-	public String getterDesc(String iface) {
-		return "L" + GETTER_PREFIX + iface + ";";
-	}
+    public FieldNode getField(ClassNode cn, String name, String desc, boolean ignoreStatic) {
+        if (cn != null) {
+            return cn.getField(name, desc, ignoreStatic);
+        }
+        return null;
+    }
 
-	public Container(Updater updater) {
-		this.updater = updater;
-	}
+    public FieldNode getField(ClassNode cn, String name, String desc) {
+        return getField(cn, name, desc, true);
+    }
 
-	public abstract int getTotalHookCount();
+    public FieldNode getPublicField(ClassNode cn, String name, String desc) {
+        if (cn != null) {
+            return cn.getPublicField(name, desc);
+        }
+        return null;
+    }
 
-	public final int getHookSuccessCount() {
-		return successful;
-	}
-    public void addHook(String name, String field,String clazz,String toInject,String desc,int mult){
-        hooks.add(new Hook(name,field,clazz,toInject,desc,mult));
-        System.out.println(" <><>-> "+name+"() = "+clazz+"."+field+" ["+desc+"]");
+    public MethodNode getMethod(ClassNode cn, String desc) {
+        if (cn != null) {
+            return cn.getMethod(desc);
+        }
+        return null;
+    }
+
+    public String getterDesc(String iface) {
+        return "L" + GETTER_PREFIX + iface + ";";
+    }
+
+    public abstract int getTotalHookCount();
+
+    public final int getHookSuccessCount() {
+        return successful;
+    }
+
+    public void addHook(String name, String field, String clazz, String toInject, String desc, int mult) {
+        hooks.add(new Hook(name, field, clazz, toInject, desc, mult));
+        System.out.println(" <" + getClass().getSimpleName() + "><>-> " + name + "() = " + clazz + "." + field + " [" + desc + "]");
         successful++;
     }
 }

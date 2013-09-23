@@ -1,8 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Map;
 
@@ -14,7 +18,7 @@ public class PlayerDefinition extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -32,5 +36,12 @@ public class PlayerDefinition extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+        EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETFIELD,"[I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
+        if (ep.find(cn)) {
+            FieldInsnNode ids = (FieldInsnNode) ep.get(0).getInstance();
+            addHook("getAppearanceIds", ids.name, ids.owner, ids.owner, ids.desc, -1);
+            FieldInsnNode idx = (FieldInsnNode) ep.get(1).getInstance();
+            addHook("getAppearanceIndices", idx.name, idx.owner, idx.owner, idx.desc, -1);
+        }
 	}
 }
