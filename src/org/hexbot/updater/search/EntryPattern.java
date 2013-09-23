@@ -36,7 +36,7 @@ public class EntryPattern {
     }
 
     public boolean find(MethodNode methodNode) {
-        Iterator iterator = methodNode.instructions.iterator();
+        Iterator<AbstractInsnNode> iterator = methodNode.instructions.iterator();
         int index = 0, radius = 0;
         while (iterator.hasNext()) {
             if (index >= entries.length)
@@ -45,7 +45,7 @@ public class EntryPattern {
                 index = 0;
                 radius = 0;
             }
-            AbstractInsnNode ain = (AbstractInsnNode) iterator.next();
+            AbstractInsnNode ain = iterator.next();
             radius++;
             if (entries[index].equals(ain)) {
                 entries[index++].setInstance(ain);

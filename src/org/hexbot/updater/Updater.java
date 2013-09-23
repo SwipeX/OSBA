@@ -55,6 +55,12 @@ public class Updater implements Runnable {
 			container.transform(container.cn);
 			totalFields += container.getTotalHookCount();
 			fields += container.getHookSuccessCount();
+			if (container.getTotalHookCount() < container.getHookSuccessCount())
+				System.out.println("Total Hook Count Should Be Higher: " + container.getClass()
+						+ " [" + container.getHookSuccessCount() + " successful]");
+			if (container.getTotalHookCount() > container.getHookSuccessCount()) {
+				System.out.println(container.getClass() + " couldn't identify all fields");
+			}
 		}
 		end = System.currentTimeMillis();
 		System.out.println("Identified " + fields + "/" + totalFields + " fields in " + (end - start) + "ms");
