@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ASMUtil implements Opcodes {
+public class ASMUtil {
+
     public static final Number BAD_NUMBER = 1000000;
     private static Map<String, Integer> OPCODE_MAP = new HashMap<>();
 
@@ -73,6 +74,13 @@ public class ASMUtil implements Opcodes {
             return -1;
         }
     }
+
+	public static String getOpcode (int opcode) {
+		for (Map.Entry<String, Integer> i : OPCODE_MAP.entrySet())
+			if (i.getValue() == opcode)
+				return i.getKey();
+		return "null (" + opcode + ")";
+	}
 
 
     public static int getReturnFor(String desc) {
@@ -142,14 +150,14 @@ public class ASMUtil implements Opcodes {
             }
         } else if (instruction instanceof IntInsnNode) {
             return ((IntInsnNode) instruction).operand;
-        } else if (instruction.getOpcode() - ICONST_M1 >= 0 && instruction.getOpcode() - ICONST_M1 <= 6) {
-            return instruction.getOpcode() - ICONST_0;
-        } else if (instruction.getOpcode() == LCONST_0 || instruction.getOpcode() == LCONST_1) {
-            return instruction.getOpcode() - LCONST_0;
-        } else if (instruction.getOpcode() - FCONST_0 >= 0 && instruction.getOpcode() - FCONST_0 <= 2) {
-            return instruction.getOpcode() - FCONST_0;
-        } else if (instruction.getOpcode() == DCONST_0 || instruction.getOpcode() == DCONST_1) {
-            return instruction.getOpcode() - DCONST_0;
+        } else if (instruction.getOpcode() - Opcodes.ICONST_M1 >= 0 && instruction.getOpcode() - Opcodes.ICONST_M1 <= 6) {
+            return instruction.getOpcode() - Opcodes.ICONST_0;
+        } else if (instruction.getOpcode() == Opcodes.LCONST_0 || instruction.getOpcode() == Opcodes.LCONST_1) {
+            return instruction.getOpcode() - Opcodes.LCONST_0;
+        } else if (instruction.getOpcode() - Opcodes.FCONST_0 >= 0 && instruction.getOpcode() - Opcodes.FCONST_0 <= 2) {
+            return instruction.getOpcode() - Opcodes.FCONST_0;
+        } else if (instruction.getOpcode() == Opcodes.DCONST_0 || instruction.getOpcode() == Opcodes.DCONST_1) {
+            return instruction.getOpcode() - Opcodes.DCONST_0;
         }
         return BAD_NUMBER;
     }
@@ -162,9 +170,9 @@ public class ASMUtil implements Opcodes {
         if (number instanceof Integer) {
             final int value = (Integer) number;
             if (value >= -128 && value <= 127) {
-                return new IntInsnNode(BIPUSH, value);
+                return new IntInsnNode(Opcodes.BIPUSH, value);
             } else if (value >= -32768 && value <= 32767) {
-                return new IntInsnNode(SIPUSH, value);
+                return new IntInsnNode(Opcodes.SIPUSH, value);
             }
         }
         return new LdcInsnNode(number);

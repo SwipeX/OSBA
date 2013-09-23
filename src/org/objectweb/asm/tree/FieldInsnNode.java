@@ -31,6 +31,7 @@ package org.objectweb.asm.tree;
 
 import java.util.Map;
 
+import org.hexbot.updater.search.ASMUtil;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -126,4 +127,9 @@ public class FieldInsnNode extends AbstractInsnNode {
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> labels) {
         return new FieldInsnNode(opcode, owner, name, desc);
     }
+
+	@Override
+	public String toString() {
+		return ASMUtil.getOpcode(opcode) + " " + owner + "." + name + " (" + desc + ")";
+	}
 }

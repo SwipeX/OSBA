@@ -1,9 +1,13 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Map;
 
@@ -15,7 +19,7 @@ public class Renderable extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 1;
 	}
 
 
@@ -34,5 +38,20 @@ public class Renderable extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		/**
+		 * Renderable() {
+		 * 		modelHeight = 0;
+		 * }
+		 */
+		for (MethodNode m : cn.methods) {
+			if (m.name.equals("<init>")) {
+				EntryPattern height = new EntryPattern(new InsnEntry(Opcodes.LDC), new InsnEntry(Opcodes.PUTFIELD, "I"));
+				if (height.find(m)) {
+					FieldInsnNode modelHeight = height.get(1, FieldInsnNode.class);
+					addHook("getModelHeight", modelHeight.name, modelHeight.owner, modelHeight.owner, "I", -1);
+				}
+			}
+		}
 	}
+
 }

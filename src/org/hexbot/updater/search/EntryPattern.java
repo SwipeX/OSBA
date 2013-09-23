@@ -59,6 +59,10 @@ public class EntryPattern {
         return entries[index];
     }
 
+	public <T> T get(int index, Class<T> clazz) {
+		return clazz.cast(get(index).getInstance());
+	}
+
 	public InsnEntry[] getEntries() {
 		return entries;
 	}
