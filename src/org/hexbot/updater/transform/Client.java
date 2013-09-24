@@ -23,7 +23,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 26;
+        return 34;
     }
 
     @Override
@@ -49,6 +49,9 @@ public class Client extends Container {
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("Player") + ";")) {
                     addHook("getPlayers", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }
+                if (fieldNode.desc.equals("[[[L" + CLASS_MATCHES.get("NodeDeque") + ";")) {
+                    addHook("getGroundItems", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                }
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("Npc") + ";")) {
                     addHook("getNpcs", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }
@@ -73,6 +76,7 @@ public class Client extends Container {
         getPlane();
         getBase();
         getCamera();
+        identifyLogin();
     }
 
     private void runEnergy() {
@@ -83,6 +87,22 @@ public class Client extends Container {
                 FieldInsnNode energy = pattern.get(2, FieldInsnNode.class);
                 addHook("getEnergy", energy.name, energy.owner, "client", "I", -1);
                 return;
+            }
+        }
+    }
+
+    private void identifyLogin() {
+        ClassNode cn = getUpdater().classnodes.get("client");
+        for (MethodNode mn : cn.methods) {
+            for (AbstractInsnNode ain : mn.instructions.toArray()) {
+                if (ain instanceof LdcInsnNode) {
+                    LdcInsnNode lin = (LdcInsnNode) ain;
+                    if (lin.cst.equals("js5connect")) {
+                        FieldInsnNode fin = (FieldInsnNode) ASMUtil.getPrevious(lin, FieldInsnNode.class);
+                        addHook("getGameState", fin.name, fin.owner, "client", "I", -1);
+                        return;
+                    }
+                }
             }
         }
     }
