@@ -1,8 +1,11 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
@@ -14,7 +17,7 @@ public class Widget extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 8;
 	}
 
 	@Override
@@ -32,5 +35,25 @@ public class Widget extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		EntryPattern setters = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "Z"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+				new InsnEntry(Opcodes.PUTFIELD, "I"));
+		FieldNode parent = cn.getField(null, "L" + cn.name + ";", true);
+		FieldNode children = cn.getField(null, "[L" + cn.name + ";", true);
+		if (parent != null)
+			addHook("getParent", parent.name, cn.name, cn.name, parent.desc, -1);
+		if (children != null)
+			addHook("getChildren", children.name, cn.name, cn.name, children.desc, -1);
+		if (setters.find(cn)) {
+			addHook("getType", setters.get(2, FieldInsnNode.class), cn.name, -1);
+			addHook("getX", setters.get(4, FieldInsnNode.class), cn.name, -1);
+			addHook("getY", setters.get(6, FieldInsnNode.class), cn.name, -1);
+			addHook("getWidth", setters.get(8, FieldInsnNode.class), cn.name, -1);
+			addHook("getHeight", setters.get(9, FieldInsnNode.class), cn.name, -1);
+			addHook("getParentId", setters.get(11, FieldInsnNode.class), cn.name, -1);
+		}
 	}
+
 }

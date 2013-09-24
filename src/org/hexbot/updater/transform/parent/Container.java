@@ -2,6 +2,7 @@ package org.hexbot.updater.transform.parent;
 
 import org.hexbot.updater.Updater;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -70,6 +71,10 @@ public abstract class Container extends Transform {
         hooks.add(new Hook(name, field, clazz, toInject, desc, mult));
         successful++;
     }
+
+	public void addHook (String name, FieldInsnNode f, String toInject, int mult) {
+		addHook(name, f.name, f.owner, toInject, f.desc, mult);
+	}
 
 	public Updater getUpdater() {
 		return updater;

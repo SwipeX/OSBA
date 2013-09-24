@@ -49,8 +49,8 @@ public class Node extends Container {
 		if (pattern.find(cn)) {
 			FieldInsnNode next = (FieldInsnNode) pattern.get(1).getInstance();
 			FieldInsnNode prev = (FieldInsnNode) pattern.get(2).getInstance();
-			container.addHook("getNext", next.name, next.owner, cn.name, next.desc, -1);
-			container.addHook("getPrevious", prev.name, prev.owner, cn.name, prev.desc, -1);
+			container.addHook("getPrevious", next.name, next.owner, cn.name, next.desc, -1);
+			container.addHook("getNext", prev.name, prev.owner, cn.name, prev.desc, -1);
 		}
 	}
 }
