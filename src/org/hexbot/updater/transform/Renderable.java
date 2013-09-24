@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -48,7 +49,7 @@ public class Renderable extends Container {
 				EntryPattern height = new EntryPattern(new InsnEntry(Opcodes.LDC), new InsnEntry(Opcodes.PUTFIELD, "I"));
 				if (height.find(m)) {
 					FieldInsnNode modelHeight = height.get(1, FieldInsnNode.class);
-					addHook("getModelHeight", modelHeight.name, modelHeight.owner, modelHeight.owner, "I", -1);
+					addHook("getModelHeight", modelHeight.name, modelHeight.owner, modelHeight.owner, "I", Multipliers.getMostUsed(modelHeight));
 				}
 			}
 		}

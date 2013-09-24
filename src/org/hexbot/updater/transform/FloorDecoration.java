@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -40,7 +41,7 @@ public class FloorDecoration extends Container {
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "L" + cn.name + ";"), new InsnEntry(Opcodes.GETFIELD, "I"));
         if (ep1.find(region, "(III)I")) {
             FieldInsnNode id = (FieldInsnNode) ep1.get(1).getInstance();
-            addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
+            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getSurrounding(id));
         }
 	}
 }

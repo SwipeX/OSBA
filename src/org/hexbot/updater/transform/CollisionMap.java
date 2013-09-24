@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -44,8 +45,8 @@ public class CollisionMap extends Container {
 		if (pattern.find(cn)) {
 			FieldInsnNode x = (FieldInsnNode) pattern.get(0).getInstance();
 			FieldInsnNode y = (FieldInsnNode) pattern.get(1).getInstance();
-			addHook("getOffsetX", x.name, x.owner, cn.name, x.desc, -1);
-			addHook("getOffsetY", y.name, y.owner, cn.name, y.desc, -1);
+			addHook("getOffsetX", x.name, x.owner, cn.name, x.desc, Multipliers.getSurrounding(x));
+			addHook("getOffsetY", y.name, y.owner, cn.name, y.desc, Multipliers.getSurrounding(y));
 		}
 	}
 }

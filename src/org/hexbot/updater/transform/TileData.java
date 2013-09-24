@@ -2,6 +2,7 @@ package org.hexbot.updater.transform;
 
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -56,11 +57,11 @@ public class TileData extends Container {
 			    FieldInsnNode fin = (FieldInsnNode) ain;
 			    if (fin == null) break;
 			    if (iin.var == 1) {
-				    addHook("getPlane", fin.name, fin.owner, cn.name, fin.desc, -1);
+				    addHook("getPlane", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
 			    } else if (iin.var == 2) {
-				    addHook("getX", fin.name, fin.owner, cn.name, fin.desc, -1);
+				    addHook("getX", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
 			    } else if (iin.var == 3) {
-				    addHook("getY", fin.name, fin.owner, cn.name, fin.desc, -1);
+				    addHook("getY", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
 				    break;
 			    }
 		    }

@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -36,28 +37,28 @@ public class NpcDefinition extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-		EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.I2L),
+		EntryPattern idPattern = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.I2L),
 				new InsnEntry(Opcodes.INVOKEVIRTUAL), new InsnEntry(Opcodes.CHECKCAST));
-		if (ep1.find(cn)) {
-			FieldInsnNode id = ep1.get(0, FieldInsnNode.class);
-			addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
+		if (idPattern.find(cn)) {
+			FieldInsnNode id = idPattern.get(0, FieldInsnNode.class);
+			addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getMostUsed(id));
 		}
 
-		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "95"), new InsnEntry(Opcodes.PUTFIELD, "I"));
-		if (ep.find(cn)) {
-			FieldInsnNode level = ep.get(1, FieldInsnNode.class);
-			addHook("getLevel", level.name, level.owner, level.owner, level.desc, -1);
+		EntryPattern levelPattern = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "95"), new InsnEntry(Opcodes.PUTFIELD, "I"));
+		if (levelPattern.find(cn)) {
+			FieldInsnNode level = levelPattern.get(1, FieldInsnNode.class);
+			addHook("getLevel", level.name, level.owner, level.owner, level.desc, Multipliers.getMostUsed(level));
 		}
 
-		EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.LDC, "null"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));
-		if (ep2.find(cn)) {
-			FieldInsnNode name = ep2.get(1, FieldInsnNode.class);
+		EntryPattern namePattern = new EntryPattern(new InsnEntry(Opcodes.LDC, "null"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));
+		if (namePattern.find(cn)) {
+			FieldInsnNode name = namePattern.get(1, FieldInsnNode.class);
 			addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
 		}
 
-		EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.ANEWARRAY), new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
-		if (ep3.find(cn)) {
-			FieldInsnNode actions = ep3.get(1, FieldInsnNode.class);
+		EntryPattern actionsPattern = new EntryPattern(new InsnEntry(Opcodes.ANEWARRAY), new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
+		if (actionsPattern.find(cn)) {
+			FieldInsnNode actions = actionsPattern.get(1, FieldInsnNode.class);
 			addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
 		}
 	}

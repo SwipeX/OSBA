@@ -3,9 +3,12 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import java.util.Map;
 
@@ -47,12 +50,18 @@ public class Widget extends Container {
 		if (children != null)
 			addHook("getChildren", children.name, cn.name, cn.name, children.desc, -1);
 		if (setters.find(cn)) {
-			addHook("getType", setters.get(2, FieldInsnNode.class), cn.name, -1);
-			addHook("getX", setters.get(4, FieldInsnNode.class), cn.name, -1);
-			addHook("getY", setters.get(6, FieldInsnNode.class), cn.name, -1);
-			addHook("getWidth", setters.get(8, FieldInsnNode.class), cn.name, -1);
-			addHook("getHeight", setters.get(9, FieldInsnNode.class), cn.name, -1);
-			addHook("getParentId", setters.get(11, FieldInsnNode.class), cn.name, -1);
+			FieldInsnNode type = setters.get(2, FieldInsnNode.class);
+			FieldInsnNode x = setters.get(4, FieldInsnNode.class);
+			FieldInsnNode y = setters.get(6, FieldInsnNode.class);
+			FieldInsnNode width = setters.get(8, FieldInsnNode.class);
+			FieldInsnNode height = setters.get(9, FieldInsnNode.class);
+			FieldInsnNode parentId = setters.get(11, FieldInsnNode.class);
+			addHook("getType", type, cn.name, Multipliers.getMostUsed(type));
+			addHook("getX", x, cn.name, Multipliers.getMostUsed(x));
+			addHook("getY", y, cn.name, Multipliers.getMostUsed(y));
+			addHook("getWidth", width, cn.name, Multipliers.getMostUsed(width));
+			addHook("getHeight", height, cn.name, Multipliers.getMostUsed(height));
+			addHook("getParentId", parentId, cn.name, Multipliers.getMostUsed(parentId));
 		}
 	}
 

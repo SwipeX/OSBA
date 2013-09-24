@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -40,9 +41,9 @@ public class Item extends Container {
                 new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.ARETURN));
         if (ep1.find(cn)) {
             FieldInsnNode id = ep1.get(0, FieldInsnNode.class);
-            addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
+            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getMostUsed(id));
             FieldInsnNode stack = ep1.get(2, FieldInsnNode.class);
-            addHook("getStackSize", stack.name, stack.owner, stack.owner, stack.desc, -1);
+            addHook("getStackSize", stack.name, stack.owner, stack.owner, stack.desc, Multipliers.getMostUsed(stack));
         }
     }
 }

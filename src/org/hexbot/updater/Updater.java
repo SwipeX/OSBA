@@ -1,5 +1,6 @@
 package org.hexbot.updater;
 
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.*;
 import org.hexbot.updater.transform.Character;
 import org.hexbot.updater.transform.parent.Container;
@@ -40,6 +41,9 @@ public class Updater implements Runnable {
 		int classes = 0;
 		int totalFields = 0;
 		int fields = 0;
+		Multipliers multipliers = Multipliers.setGlobal(Multipliers.instance(classnodes.values()));
+		System.out.println("\tMultipliers finished in " + (System.currentTimeMillis() - start) + " millis, " +
+				"found " + multipliers.getFields().size());
 		Map<String, Container> containers = new HashMap<>();
 		for (Transform transform : transforms) {
 			totalClasses++;

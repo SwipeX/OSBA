@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -42,18 +43,18 @@ public class InteractableObject extends Container {
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "[L" + cn.name + ";"), new InsnEntry(Opcodes.AALOAD), new InsnEntry(Opcodes.GETFIELD, "I"));
         if (ep1.find(region)) {
 	        FieldInsnNode id = (FieldInsnNode) ep1.get(2).getInstance();
-            addHook("getId", id.name, id.owner, id.owner, id.desc, -1);
+            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getSurrounding(id));
         }
         EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.INVOKESPECIAL), new InsnEntry(Opcodes.PUTFIELD, "I"),
                 new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
                 new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"));
         if (ep2.find(region)) {
 	        FieldInsnNode worldx = (FieldInsnNode) ep2.get(4).getInstance();
-	        addHook("getWorldX", worldx.name, worldx.owner, worldx.owner, worldx.desc, -1);
+	        addHook("getWorldX", worldx.name, worldx.owner, worldx.owner, worldx.desc, Multipliers.getMostUsed(worldx));
 	        FieldInsnNode height = (FieldInsnNode) ep2.get(6).getInstance();
-	        addHook("getHeight", height.name, height.owner, height.owner, height.desc, -1);
+	        addHook("getHeight", height.name, height.owner, height.owner, height.desc, Multipliers.getMostUsed(height));
 	        FieldInsnNode worldy = (FieldInsnNode) ep2.get(5).getInstance();
-            addHook("getWorldY", worldy.name, worldy.owner, worldy.owner, worldy.desc, -1);
+            addHook("getWorldY", worldy.name, worldy.owner, worldy.owner, worldy.desc, Multipliers.getMostUsed(worldy));
         }
 	    FieldNode renderable = cn.getField(null, "L" + CLASS_MATCHES.get("Renderable") + ";");
 	    addHook("getModel", renderable.name, cn.name, cn.name, renderable.desc, -1);
