@@ -1,17 +1,21 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.ASMUtil;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
+
 public class Client extends Container {
+
+    private Object plane;
 
     public Client(Updater updater) {
         super(updater);
@@ -19,7 +23,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 9;
+        return 26;
     }
 
     @Override
@@ -48,6 +52,9 @@ public class Client extends Container {
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("Npc") + ";")) {
                     addHook("getNpcs", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }
+                if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("CollisionMap") + ";")) {
+                    addHook("getCollisionMaps", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                }
                 if (fieldNode.desc.equals("[[L" + CLASS_MATCHES.get("Widget") + ";")) {
                     addHook("getWidgets", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }
@@ -61,6 +68,21 @@ public class Client extends Container {
         skillArrays();
         destinationHooks();
         menuHooks();
+        runEnergy();
+        identifyTileData();
+        getPlane();
+    }
+
+    private void runEnergy() {
+        for (ClassNode cn : getUpdater().classnodes.values()) {
+            EntryPattern pattern = new EntryPattern(
+                    new InsnEntry(Opcodes.SIPUSH, "3321"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+            if (pattern.find(cn)) {
+                FieldInsnNode energy = pattern.get(2, FieldInsnNode.class);
+                addHook("getEnergy", energy.name, energy.owner, "client", "I", -1);
+                return;
+            }
+        }
     }
 
     private void menuHooks() {
@@ -145,4 +167,57 @@ public class Client extends Container {
         }
     }
 
+    public void identifyTileData() {
+        tileBytes:
+        for (final ClassNode cn : updater.classnodes.values()) {
+            for (final MethodNode mn : cn.methods) {
+                if ((mn.access & ACC_STATIC) == ACC_STATIC && mn.desc.endsWith(")V")) {
+                    for (final AbstractInsnNode start : mn.instructions.toArray()) {
+                        AbstractInsnNode current = start;
+                        if (start.getOpcode() == GETSTATIC
+                                && (current = current.getNext()).getOpcode() == ILOAD
+                                && (current = current.getNext()).getOpcode() == AALOAD
+                                && (current = current.getNext()).getOpcode() == ILOAD
+                                && (current = current.getNext()).getOpcode() == AALOAD
+                                && (current = current.getNext()).getOpcode() == ILOAD
+                                && (current = current.getNext()).getOpcode() == BALOAD
+                                && ASMUtil.getNumericalValue(current = current.getNext()).equals(16)
+                                && current.getNext().getOpcode() == IAND) {
+                            FieldInsnNode fin = (FieldInsnNode) start;
+                            addHook("getTileBytes", fin.name, fin.owner, "client", "[[[B", -1);
+                            break tileBytes;
+                        }
+                    }
+                }
+            }
+        }
+        for (final ClassNode cn : updater.classnodes.values()) {
+            for (final MethodNode mn : cn.methods) {
+                if ((mn.access & ACC_STATIC) == ACC_STATIC && mn.desc.endsWith(")I")) {
+                    for (final AbstractInsnNode start : mn.instructions.toArray()) {
+                        AbstractInsnNode current = start;
+                        if (ASMUtil.getNumericalValue(current).equals(7)
+                                && (current = current.getNext()).getOpcode() == ISHR
+                                && (current = ASMUtil.getPrevious(current, GETSTATIC)) != null) {
+                            FieldInsnNode fin = (FieldInsnNode) current;
+                            if (fin.desc.equals("[[[I")) {
+                                addHook("getTileHeights", fin.name, fin.owner, "client", "[[[I", -1);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void getPlane() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.SIPUSH, "13056"), new InsnEntry(Opcodes.SIPUSH, "13056"),
+                new InsnEntry(Opcodes.GETSTATIC, "I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
+            addHook("getPlane", index.name, index.owner, "client", "I", -1);
+        }
+    }
 }
