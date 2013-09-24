@@ -59,7 +59,42 @@ public class Client extends Container {
         logoutHooks();
         playerIndex();
         skillArrays();
+        destinationHooks();
+        menuHooks();
+    }
 
+    private void menuHooks() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.PUTSTATIC, "Z"), new InsnEntry(Opcodes.GETSTATIC, "I"),
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"),
+                new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode open = pattern.get(0, FieldInsnNode.class);
+            addHook("isMenuOpen", open.name, open.owner, "client", "Z", -1);
+            FieldInsnNode x = pattern.get(1, FieldInsnNode.class);
+            addHook("getMenuX", x.name, x.owner, "client", "I", -1);
+            FieldInsnNode y = pattern.get(2, FieldInsnNode.class);
+            addHook("getMenuY", y.name, y.owner, "client", "I", -1);
+            FieldInsnNode width = pattern.get(3, FieldInsnNode.class);
+            addHook("getMenuWidth", width.name, width.owner, "client", "I", -1);
+            FieldInsnNode height = pattern.get(4, FieldInsnNode.class);
+            addHook("getMenuHeight", height.name, height.owner, "client", "I", -1);
+            FieldInsnNode count = pattern.get(8, FieldInsnNode.class);
+            addHook("getMenuCount", count.name, count.owner, "client", "I", -1);
+        }
+
+    }
+
+    private void destinationHooks() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.GETSTATIC, "L" + CLASS_MATCHES.get("Player") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"),
+                new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC), new InsnEntry(Opcodes.GETSTATIC));
+        if (pattern.find(cn, "(Z)V")) {
+            FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
+            addHook("getDestinationX", x.name, x.owner, "client", "I", -1);
+            FieldInsnNode y = pattern.get(4, FieldInsnNode.class);
+            addHook("getDestinationY", y.name, y.owner, "client", "I", -1);
+        }
     }
 
     private void skillArrays() {
