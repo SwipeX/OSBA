@@ -36,12 +36,12 @@ public class Client extends Container {
     public void transform(ClassNode cn) {
         for (ClassNode cl : updater.classnodes.values()) {
             for (FieldNode fieldNode : cl.fields) {
-				if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Mouse") + ";")) {
-					addHook("getMouse", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
-				}
-				if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Keyboard") + ";")) {
-					addHook("getKeyboard", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
-				}
+                if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Mouse") + ";")) {
+                    addHook("getMouse", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                }
+                if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Keyboard") + ";")) {
+                    addHook("getKeyboard", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                }
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Player") + ";")) {
                     addHook("getLocalPlayer", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }
@@ -70,6 +70,7 @@ public class Client extends Container {
         skillArrays();
         destinationHooks();
         menuHooks();
+        menuText();
         runEnergy();
         identifyTileData();
         getPlane();
@@ -107,8 +108,7 @@ public class Client extends Container {
     }
 
     private void menuHooks() {
-        EntryPattern pattern = new EntryPattern(
-                new InsnEntry(Opcodes.PUTSTATIC, "Z"), new InsnEntry(Opcodes.GETSTATIC, "I"),
+        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.PUTSTATIC, "Z"), new InsnEntry(Opcodes.GETSTATIC, "I"),
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"),
                 new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
@@ -126,6 +126,19 @@ public class Client extends Container {
             addHook("getMenuCount", count.name, count.owner, "client", "I", Multipliers.getSurrounding(count));
         }
 
+    }
+
+    private void menuText() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.GETSTATIC, "I"),
+                new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"), new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"),
+                new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"), new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"), new InsnEntry(Opcodes.GETSTATIC,"[I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode menuOptions = pattern.get(1, FieldInsnNode.class);
+            addHook("getMenuOptions", menuOptions.name, menuOptions.owner, "client", "[Ljava/lang/String;", -1);
+            FieldInsnNode menuActions = pattern.get(3, FieldInsnNode.class);
+            addHook("getMenuActions", menuActions.name, menuActions.owner, "client", "[Ljava/lang/String;", -1);
+        }
     }
 
     private void destinationHooks() {
