@@ -7,6 +7,7 @@ import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class PlayerDefinition extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 2;
+		return 4;
 	}
 
 	@Override
@@ -43,5 +44,9 @@ public class PlayerDefinition extends Container {
 			FieldInsnNode idx = ep.get(1, FieldInsnNode.class);
 			addHook("getAppearanceIndices", idx.name, idx.owner, idx.owner, idx.desc, -1);
 		}
+		FieldNode id = cn.getField(null, "I");
+		addHook("getNpcId", id.name, cn.name, cn.name, id.desc, -1);
+		FieldNode female = cn.getField(null, "Z");
+		addHook("isFemale", female.name, cn.name, cn.name, female.desc, -1);
 	}
 }
