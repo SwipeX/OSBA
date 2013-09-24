@@ -24,7 +24,7 @@ public class Updater implements Runnable {
 			new InteractableObject(this), new Model(this), new Projectile(this), new Boundary(this),
 			new FloorDecoration(this), new WallDecoration(this), new ItemLayer(this), new TileData(this),
 			new ItemDefinition(this), new Item(this), new Character(this), new PlayerDefinition(this),
-			new Player(this), new NpcDefinition(this), new Npc(this), new Region(this), new Client(this)};
+			new Player(this), new NpcDefinition(this), new Npc(this), new Region(this), new Mouse(this), new Keyboard(this), new Client(this)};
 
 	public Updater() {
 		long start = System.currentTimeMillis();

@@ -23,7 +23,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 35;
+        return 37;
     }
 
     @Override
@@ -40,9 +40,12 @@ public class Client extends Container {
     public void transform(ClassNode cn) {
         for (ClassNode cl : updater.classnodes.values()) {
             for (FieldNode fieldNode : cl.fields) {
-                if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Mouse") + ";")) {
-                    addHook("getMouse", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
-                }
+				if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Mouse") + ";")) {
+					addHook("getMouse", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+				}
+				if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Keyboard") + ";")) {
+					addHook("getKeyboard", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+				}
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Player") + ";")) {
                     addHook("getLocalPlayer", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
                 }

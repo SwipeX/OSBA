@@ -1,7 +1,7 @@
 Hooks needed for integration with Hexbot Pro
 
-[] IMouse
-[] IKeyboard
+[#] IMouse
+[#] IKeyboard
 
      Client
 []	 int[] getSettings();
@@ -10,8 +10,8 @@ Hooks needed for integration with Hexbot Pro
 []	 int CameraX();
 []	 int CameraY();
 []	 int CameraZ();
-[]	 IKeyboard getKeyboard();
-[]	 IMouse getMouse();
+[#]	 IKeyboard getKeyboard();
+[#]	 IMouse getMouse();
 
      ICharacter
 []	 int getHp();
