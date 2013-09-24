@@ -7,6 +7,7 @@ import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class Node extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -36,6 +37,8 @@ public class Node extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		FieldNode uid = cn.getField(null, "J");
+		addHook("getUID", uid.name, cn.name, cn.name, uid.desc, -1);
 		addNodeHooks(this, cn);
 	}
 
