@@ -57,6 +57,35 @@ public class Client extends Container {
             }
         }
         logoutHooks();
+        playerIndex();
+        skillArrays();
+
+    }
+
+    private void skillArrays() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.BIPUSH, "25"), new InsnEntry(Opcodes.NEWARRAY),
+                new InsnEntry(Opcodes.PUTSTATIC, "[I"), new InsnEntry(Opcodes.BIPUSH, "25"), new InsnEntry(Opcodes.NEWARRAY),
+                new InsnEntry(Opcodes.PUTSTATIC, "[I"), new InsnEntry(Opcodes.BIPUSH, "25"), new InsnEntry(Opcodes.NEWARRAY),
+                new InsnEntry(Opcodes.PUTSTATIC, "[I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode currentLevels = pattern.get(2, FieldInsnNode.class);
+            addHook("getCurrentLevels", currentLevels.name, currentLevels.owner, "client", "I", -1);
+            FieldInsnNode realLevels = pattern.get(5, FieldInsnNode.class);
+            addHook("getRealLevels", realLevels.name, realLevels.owner, "client", "I", -1);
+            FieldInsnNode exp = pattern.get(8, FieldInsnNode.class);
+            addHook("getExpArray", exp.name, exp.owner, "client", "I", -1);
+        }
+    }
+
+    private void playerIndex() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "L" + CLASS_MATCHES.get("Player") + ";"),
+                new InsnEntry(Opcodes.ACONST_NULL));
+        if (pattern.find(cn)) {
+            FieldInsnNode index = pattern.get(0, FieldInsnNode.class);
+            addHook("getPlayerIndex", index.name, index.owner, "client", "I", -1);
+        }
     }
 
     private void logoutHooks() {
