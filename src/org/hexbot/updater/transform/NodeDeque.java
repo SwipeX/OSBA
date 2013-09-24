@@ -2,7 +2,8 @@ package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.transform.parent.Container;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class NodeDeque extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -32,5 +33,20 @@ public class NodeDeque extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		for (MethodNode mn : cn.methods) {
+			for (AbstractInsnNode ain : mn.instructions.toArray()) {
+				if (ain.getOpcode() != Opcodes.PUTFIELD) continue;
+				FieldInsnNode fin = (FieldInsnNode) ain;
+				if (fin.owner.equals(cn.name)) {
+					addHook("getCurrent", fin.name, fin.owner, cn.name, fin.desc, -1);
+					for (FieldNode fn : cn.fields) {
+						if (fn.name.equals(fin.name) || (fn.access & Opcodes.ACC_STATIC) == Opcodes.ACC_STATIC) continue;
+						addHook("getHead", fn.name, cn.name, cn.name, fn.desc, -1);
+						break;
+					}
+					return;
+				}
+			}
+		}
 	}
 }
