@@ -1,6 +1,5 @@
 package org.hexbot.updater.search;
 
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
 /**
@@ -10,17 +9,23 @@ import org.objectweb.asm.tree.*;
  * Copyright under GPL liscense by author.
  */
 public class InsnEntry {
+
     int opcode;
-    String desc;
+    String desc, owner;
     AbstractInsnNode instance;
 
-    public InsnEntry(int opcode, String desc) {
+    public InsnEntry(int opcode, String desc, String owner) {
         this.opcode = opcode;
         this.desc = desc;
+	    this.owner = owner;
     }
 
+	public InsnEntry(int opcode, String desc) {
+		this(opcode, desc, null);
+	}
+
     public InsnEntry(int opcode) {
-        this(opcode, null);
+        this(opcode, null, null);
     }
 
     public AbstractInsnNode getInstance() {
@@ -37,10 +42,14 @@ public class InsnEntry {
         if (ain.getOpcode() != opcode) return false;
         if (desc == null) return true;
         if (ain instanceof FieldInsnNode) {
-            return desc.equals(((FieldInsnNode) ain).desc);
+            if (desc.equals(((FieldInsnNode) ain).desc)) {
+	            return owner == null || ((FieldInsnNode) ain).owner.equals(owner);
+            }
         } else if (ain instanceof MethodInsnNode) {
             MethodInsnNode min = (MethodInsnNode) ain;
-            return (min.name).equalsIgnoreCase(desc);
+            if ((min.name).equalsIgnoreCase(desc)) {
+	            return owner == null || min.owner.equals(owner);
+            }
         } else if (ain instanceof IntInsnNode) {
             return Integer.toString(((IntInsnNode) ain).operand).equals(desc);
         } else if (ain instanceof LdcInsnNode) {

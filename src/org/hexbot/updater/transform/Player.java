@@ -46,5 +46,13 @@ public class Player extends Container {
 			FieldInsnNode lvl = (FieldInsnNode) ep.get(0).getInstance();
 			addHook("getLevel", lvl.name, lvl.owner, lvl.owner, lvl.desc, -1);
 		}
+		ClassNode client = updater.classnodes.get("client");
+		EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I", cn.name),
+				new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name),
+				new InsnEntry(Opcodes.PUTFIELD, "L" + CLASS_MATCHES.get("Model") + ";"));
+		if (ep1.find(client)) {
+			FieldInsnNode skull = (FieldInsnNode) ep1.get(2).getInstance();
+			addHook("getSkullIcon", skull.name, skull.owner, cn.name, skull.desc, -1);
+		}
 	}
 }
