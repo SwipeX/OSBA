@@ -23,7 +23,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 34;
+        return 35;
     }
 
     @Override
