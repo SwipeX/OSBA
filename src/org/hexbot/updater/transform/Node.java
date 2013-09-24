@@ -36,41 +36,18 @@ public class Node extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-		addNodeHook(this, "L" + GETTER + ";", cn);
+		addNodeHooks(this, cn);
 	}
 
-	/**
-	 * For convenience when hooking CacheableNode
-	 */
-	protected static void addNodeHook(Container container, String desc, ClassNode cn) {
-		/**
-		 * 	next & previous are found in the remove() method
-		 *
-		 * 	<Code>
-		 *
-		 *	if(this.next != null) {
-		 *		this.next.previous = this.previous;
-		 *		this.previous.next = this.next;
-		 *		this.previous = null;
-		 *		this.next = null;
-		 *    }
-		 *
-		 */
-		FieldInsnNode fin;
-		EntryPattern next = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.IFNONNULL));
-		//TODO fix patterns
-		//idk wtf is happening here, it returns false even though the pattern is found.
-		//if i remove the if boxing it works fine
-		//if (next.find(cn)) {
-		next.find(cn);
-		fin = next.get(0, FieldInsnNode.class);
-		container.addHook("getNext", fin.name, fin.owner, fin.owner, desc, -1);
-		//}
-		EntryPattern previous = new EntryPattern(new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.PUTFIELD));
-		if (previous.find(cn)) {
-			fin = previous.get(1, FieldInsnNode.class);
-			container.addHook("getPrevious", fin.name, fin.owner, fin.owner, desc, -1);
+	protected static void addNodeHooks(Container container, ClassNode cn) {
+		String desc = "L" + cn.name + ";";
+		EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.ACONST_NULL),
+				new InsnEntry(Opcodes.PUTFIELD, desc), new InsnEntry(Opcodes.PUTFIELD, desc));
+		if (pattern.find(cn)) {
+			FieldInsnNode next = (FieldInsnNode) pattern.get(1).getInstance();
+			FieldInsnNode prev = (FieldInsnNode) pattern.get(2).getInstance();
+			container.addHook("getNext", next.name, next.owner, cn.name, next.desc, -1);
+			container.addHook("getPrevious", prev.name, prev.owner, cn.name, prev.desc, -1);
 		}
 	}
-
 }

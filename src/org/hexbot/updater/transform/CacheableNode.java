@@ -1,8 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.EntryPattern;
+import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Map;
 
@@ -32,10 +36,7 @@ public class CacheableNode extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-		/**
-		 * Remove method is identical to Node
-		 */
-		Node.addNodeHook(this, "L" + GETTER + ";", cn);
+		Node.addNodeHooks(this, cn);
 	}
 
 }
