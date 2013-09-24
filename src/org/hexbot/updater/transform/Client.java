@@ -28,7 +28,7 @@ public class Client extends Container {
 
     @Override
     public String getInterfaceString() {
-        return GETTER_PREFIX.substring(0, GETTER_PREFIX.length() - 1) + "Client";
+        return GETTER_PREFIX + "Client";
     }
 
     @Override
@@ -149,11 +149,11 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.PUTSTATIC, "[I"));
         if (pattern.find(cn)) {
             FieldInsnNode currentLevels = pattern.get(2, FieldInsnNode.class);
-            addHook("getCurrentLevels", currentLevels.name, currentLevels.owner, "client", "I", -1);
+            addHook("getCurrentLevels", currentLevels.name, currentLevels.owner, "client", "[I", -1);
             FieldInsnNode realLevels = pattern.get(5, FieldInsnNode.class);
-            addHook("getRealLevels", realLevels.name, realLevels.owner, "client", "I", -1);
+            addHook("getRealLevels", realLevels.name, realLevels.owner, "client", "[I", -1);
             FieldInsnNode exp = pattern.get(8, FieldInsnNode.class);
-            addHook("getExpArray", exp.name, exp.owner, "client", "I", -1);
+            addHook("getExpArray", exp.name, exp.owner, "client", "[I", -1);
         }
     }
 

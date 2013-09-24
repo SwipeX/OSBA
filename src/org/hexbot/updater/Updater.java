@@ -6,7 +6,11 @@ import org.hexbot.updater.transform.parent.Container;
 import org.hexbot.updater.transform.parent.Hook;
 import org.hexbot.updater.transform.parent.Transform;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +81,35 @@ public class Updater implements Runnable {
 			}
 			System.out.println();
 		}
+		try {
+			writeProHooks(containers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void writeProHooks(Map<String, Container> containers) throws IOException {
+		PrintWriter out = new PrintWriter("hooks.hbp");
+		for (Map.Entry<String, Container> entry : containers.entrySet()) {
+			Container container = entry.getValue();
+			if (container.cn == null) {
+				continue;
+			}
+			String impl = container.getInterfaceString();
+			out.println(String.format("$%s#%s", container.cn.name, impl));
+		}
+		for (Map.Entry<String, Container> entry : containers.entrySet()) {
+			Container container = entry.getValue();
+			if (container.cn == null) {
+				continue;
+			}
+			for (Hook hook : container.hooks) {
+				FieldNode fn = classnodes.get(hook.clazz).getField(hook.field, null, false);
+				boolean isStatic = Modifier.isStatic(fn.access);
+				out.println(String.format("@%s,%s,%s,%s,%s,%s,%s", hook.name, hook.field, hook.clazz, hook.desc, hook.toInject, hook.multiplier, isStatic));
+			}
+		}
+		out.close();
 	}
 
 	public static void main(String[] args) throws Exception {

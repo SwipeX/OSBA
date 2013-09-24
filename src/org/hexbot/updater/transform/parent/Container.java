@@ -25,7 +25,7 @@ public abstract class Container extends Transform {
     }
 
     public String getInterfaceString() {
-        return GETTER;
+        return GETTER_PREFIX + "I" + getClass().getSimpleName();
     }
 
     public String getName(ClassNode cn) {

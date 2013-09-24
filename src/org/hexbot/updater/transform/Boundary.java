@@ -16,11 +16,6 @@ public class Boundary extends Container {
 	public int getTotalHookCount() {
 		return 0;
 	}
-	
-	@Override
-	public String getInterfaceString() {
-		return GETTER_PREFIX + "GameObject";
-	}
 
 	@Override
 	public ClassNode validate(Map<String, ClassNode> classnodes) {

@@ -23,11 +23,6 @@ public class InteractableObject extends Container {
     }
 
     @Override
-    public String getInterfaceString() {
-        return GETTER_PREFIX + "GameObject";
-    }
-
-    @Override
     public ClassNode validate(Map<String, ClassNode> classnodes) {
         for (ClassNode cn : classnodes.values()) {
             if (cn.superName.equals("java/lang/Object")) {

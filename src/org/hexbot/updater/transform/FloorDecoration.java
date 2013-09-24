@@ -20,11 +20,6 @@ public class FloorDecoration extends Container {
 	public int getTotalHookCount() {
 		return 1;
 	}
-	
-	@Override
-	public String getInterfaceString() {
-		return GETTER_PREFIX + "GameObject";
-	}
 
 	@Override
 	public ClassNode validate(Map<String, ClassNode> classnodes) {
