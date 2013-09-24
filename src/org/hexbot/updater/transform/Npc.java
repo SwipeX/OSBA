@@ -3,6 +3,7 @@ package org.hexbot.updater.transform;
 import org.hexbot.updater.Updater;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class Npc extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -30,5 +31,7 @@ public class Npc extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		FieldNode def = cn.getField(null, "L" + CLASS_MATCHES.get("NpcDefinition") + ";");
+		addHook("getDefinition", def.name, cn.name, cn.name, def.desc, -1);
 	}
 }
