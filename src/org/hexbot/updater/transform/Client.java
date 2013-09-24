@@ -71,6 +71,8 @@ public class Client extends Container {
         runEnergy();
         identifyTileData();
         getPlane();
+        getBase();
+        getCamera();
     }
 
     private void runEnergy() {
@@ -218,6 +220,38 @@ public class Client extends Container {
         if (pattern.find(cn)) {
             FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
             addHook("getPlane", index.name, index.owner, "client", "I", -1);
+        }
+    }
+
+    public void getCamera() {
+        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "64"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.INVOKESTATIC),
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode x = pattern.get(4, FieldInsnNode.class);
+            addHook("getCameraX", x.name, x.owner, "client", "I", -1);
+            FieldInsnNode z = pattern.get(5, FieldInsnNode.class);
+            addHook("getCameraZ", z.name, z.owner, "client", "I", -1);
+            FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
+            addHook("getCameraY", y.name, y.owner, "client", "I", -1);
+        }
+        EntryPattern pattern1 = new EntryPattern(new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.SIPUSH, "2047"),
+                new InsnEntry(Opcodes.PUTSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+        if (pattern1.find(cn)) {
+            FieldInsnNode pitch = pattern1.get(2, FieldInsnNode.class);
+            addHook("getPitch", pitch.name, pitch.owner, "client", "I", -1);
+            FieldInsnNode yaw = pattern1.get(3, FieldInsnNode.class);
+            addHook("getYaw", yaw.name, yaw.owner, "client", "I", -1);
+        }
+    }
+
+    public void getBase() {
+        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[I"),
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
+            addHook("getBaseX", x.name, x.owner, "client", "I", -1);
+            FieldInsnNode y = pattern.get(5, FieldInsnNode.class);
+            addHook("getBaseY", y.name, y.owner, "client", "I", -1);
         }
     }
 }
