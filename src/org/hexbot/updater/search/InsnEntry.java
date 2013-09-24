@@ -51,7 +51,18 @@ public class InsnEntry {
 	            return owner == null || min.owner.equals(owner);
             }
         } else if (ain instanceof IntInsnNode) {
-            return Integer.toString(((IntInsnNode) ain).operand).equals(desc);
+	        int op = ((IntInsnNode) ain).operand;
+	        if (desc.startsWith("<")) {
+		        return op < Integer.parseInt(desc.substring(1));
+	        } else if (desc.startsWith(">")) {
+		        return op > Integer.parseInt(desc.substring(1));
+	        } else if (desc.startsWith("<=")) {
+	            return op <= Integer.parseInt(desc.substring(2));
+	        } else if (desc.startsWith(">=")) {
+				return op >= Integer.parseInt(desc.substring(2));
+	        } else {
+		        return op == Integer.parseInt(desc);
+	        }
         } else if (ain instanceof LdcInsnNode) {
             Object cst = ((LdcInsnNode) ain).cst;
             return cst != null && cst.toString().equals(desc);
