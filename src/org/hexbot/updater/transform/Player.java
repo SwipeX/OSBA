@@ -1,13 +1,12 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.ASMUtil;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class Player extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 1;
+		return 4;
 	}
 
 	@Override
@@ -37,13 +36,15 @@ public class Player extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.ALOAD), new InsnEntry(Opcodes.GETFIELD, "Ljava/lang/String;"), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;"));
-		for (MethodNode mn : cn.methods) {
-			if (ep.find(mn)) {
-				FieldInsnNode name = ep.get(1, FieldInsnNode.class);
-				addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
-				break;
-			}
+		FieldNode name = cn.getField(null, "Ljava/lang/String;");
+		addHook("getName", name.name, cn.name, cn.name, name.desc, -1);
+		FieldNode def = cn.getField(null, "L" + CLASS_MATCHES.get("PlayerDefinition") + ";");
+		addHook("getDefinition", def.name, cn.name, cn.name, def.desc, -1);
+		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+				new InsnEntry(Opcodes.GETFIELD, "L" + CLASS_MATCHES.get("PlayerDefinition") + ";"));
+		if (ep.find(cn)) {
+			FieldInsnNode lvl = (FieldInsnNode) ep.get(0).getInstance();
+			addHook("getLevel", lvl.name, lvl.owner, lvl.owner, lvl.desc, -1);
 		}
 	}
 }
