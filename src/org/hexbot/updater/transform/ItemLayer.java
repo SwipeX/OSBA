@@ -18,7 +18,7 @@ public class ItemLayer extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 5;
+		return 6;
 	}
 
 	@Override
@@ -42,18 +42,21 @@ public class ItemLayer extends Container {
 			EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, render, cn.name),
 					new InsnEntry(Opcodes.PUTFIELD, "I", cn.name), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name),
 					new InsnEntry(Opcodes.PUTFIELD, "I", cn.name), new InsnEntry(Opcodes.PUTFIELD, render, cn.name),
-					new InsnEntry(Opcodes.PUTFIELD, render, cn.name));
+					new InsnEntry(Opcodes.PUTFIELD, render, cn.name), new InsnEntry(Opcodes.GETFIELD),
+					new InsnEntry(Opcodes.ISTORE), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
 			if (pattern.find(region)) {
-				FieldInsnNode item1 = (FieldInsnNode) pattern.get(0).getInstance();
+				FieldInsnNode bottom = (FieldInsnNode) pattern.get(0).getInstance();
 				FieldInsnNode x = (FieldInsnNode) pattern.get(1).getInstance();
 				FieldInsnNode y = (FieldInsnNode) pattern.get(3).getInstance();
-				FieldInsnNode item2 = (FieldInsnNode) pattern.get(4).getInstance();
-				FieldInsnNode item3 = (FieldInsnNode) pattern.get(5).getInstance();
-				addHook("getItem1", item1.name, item1.owner, cn.name, item1.desc, -1);
+				FieldInsnNode mid = (FieldInsnNode) pattern.get(4).getInstance();
+				FieldInsnNode top = (FieldInsnNode) pattern.get(5).getInstance();
+				FieldInsnNode height = (FieldInsnNode) pattern.get(8).getInstance();
+				addHook("getBottomItem", bottom.name, bottom.owner, cn.name, bottom.desc, -1);
 				addHook("getX", x.name, x.owner, cn.name, x.desc, -1);
 				addHook("getY", y.name, y.owner, cn.name, y.desc, -1);
-				addHook("getItem2", item2.name, item2.owner, cn.name, item2.desc, -1);
-				addHook("getItem3", item3.name, item3.owner, cn.name, item3.desc, -1);
+				addHook("getMiddleItem", mid.name, mid.owner, cn.name, mid.desc, -1);
+				addHook("getTopItem", top.name, top.owner, cn.name, top.desc, -1);
+				addHook("getHeight", height.name, height.owner, cn.name, height.desc, -1);
 			}
 		}
 	}
