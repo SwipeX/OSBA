@@ -124,6 +124,7 @@ $bj#org/hexbot/core/impl/IMouse
 @getPitch,ft,m,I,client,-792252477,true
 @getYaw,fs,aw,I,client,-792252477,true
 @getGameState,h,client,I,client,1946484663,true
+@getSettings,a,fi,[I,client,-1,true
 @getId,q,aa,I,aa,-2007014387,false
 @getLevel,w,aa,I,aa,-99142993,false
 @getName,b,aa,Ljava/lang/String;,aa,-1,false
@@ -135,6 +136,8 @@ $bj#org/hexbot/core/impl/IMouse
 @getAnimation,ad,az,I,az,-417459509,false
 @getInteractingIndex,af,az,I,az,-760299985,false
 @getOrientation,r,az,I,az,2000849491,false
+@getHealth,av,az,I,az,-1472068590,false
+@getMaxHealth,au,az,I,az,1,false
 @getPrevious,ci,fd,Lfd;,fd,-1,false
 @getNext,ch,fd,Lfd;,fd,-1,false
 @getSceneObjects,f,cw,[Lck;,cw,-1,false

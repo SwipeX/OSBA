@@ -19,7 +19,7 @@ public class Character extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 7;
+        return 9;
     }
 
     @Override
@@ -62,11 +62,20 @@ public class Character extends Container {
         ep3.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";I)V");
         FieldInsnNode index = ep3.get(1, FieldInsnNode.class);
         addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, Multipliers.getSurrounding(index));
+
         EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN));
         ep4.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";)V");
         FieldInsnNode orientation = ep4.get(0, FieldInsnNode.class);
         addHook("getOrientation", orientation.name, orientation.owner, CLASS_MATCHES.get("Character"), orientation.desc,
                 Multipliers.getGlobal().getField(orientation).getMostUsed());
+
+        EntryPattern ep5 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1),new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "I"),new InsnEntry(Opcodes.IDIV));
+        if (ep5.find(updater.classnodes.get("client"))) {
+            FieldInsnNode hp = ep5.get(1, FieldInsnNode.class);
+            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, Multipliers.getGlobal().getField(hp).getMostUsed());
+            FieldInsnNode max = ep5.get(2, FieldInsnNode.class);
+            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, Multipliers.getGlobal().getField(max).getMostUsed());
+        }
     }
 
 }

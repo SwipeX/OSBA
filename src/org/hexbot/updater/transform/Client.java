@@ -77,6 +77,7 @@ public class Client extends Container {
         getBase();
         getCamera();
         identifyLogin();
+        settings();
     }
 
     private void runEnergy() {
@@ -178,7 +179,15 @@ public class Client extends Container {
             addHook("getPlayerIndex", index.name, index.owner, "client", "I", Multipliers.getSurrounding(index));
         }
     }
-
+    private void settings() {
+        EntryPattern pattern = new EntryPattern(
+                new InsnEntry(Opcodes.GETFIELD), new InsnEntry(Opcodes.GETSTATIC, "[I"),
+                new InsnEntry(Opcodes.GETSTATIC, "[I"));
+        if (pattern.find(cn)) {
+            FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
+            addHook("getSettings", index.name, index.owner, "client", "[I", -1);
+        }
+    }
     private void logoutHooks() {
         // void logout()
         for (ClassNode cn : getUpdater().classnodes.values()) {
