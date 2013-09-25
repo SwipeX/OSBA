@@ -132,6 +132,9 @@ $bj#org/hexbot/core/impl/IMouse
 @getLevel,w,aa,I,aa,-99142993,false
 @getName,b,aa,Ljava/lang/String;,aa,-1,false
 @getActions,t,aa,[Ljava/lang/String;,aa,-1,false
+@getName,i,w,Ljava/lang/String;,w,-1,false
+@getPreviousName,p,w,Ljava/lang/String;,w,-1,false
+@getWorld,a,w,I,w,-1,false
 @getModel,model,az,Ljava/lang/Object;,az,-1,false
 @getX,s,az,I,az,-74784875,false
 @getY,t,az,I,az,-906960355,false
