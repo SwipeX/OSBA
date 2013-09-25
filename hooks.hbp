@@ -57,6 +57,9 @@ $bj#org/hexbot/core/impl/IMouse
 @getSize,i,fm,I,fm,-1,false
 @getHead,a,fm,Lfk;,fm,-1,false
 @getId,q,db,I,db,-1666216555,false
+@getModel,l,db,Lcv;,db,-1,false
+@getX,p,db,I,db,-1,false
+@getY,a,db,I,db,-1,false
 @getHead,i,fe,Lfd;,fe,-1,false
 @isMoving,f,v,Z,v,-1,false
 @getDefinition,w,v,Lag;,v,-1,false
