@@ -53,6 +53,9 @@ $bj#org/hexbot/core/impl/IMouse
 @getDeque,q,fb,Lfe;,fb,-1,false
 @getSize,p,fb,I,fb,-1,false
 @getRemaining,a,fb,I,fb,-1,false
+@getBuckets,p,fm,[Lfk;,fm,-1,false
+@getSize,i,fm,I,fm,-1,false
+@getHead,a,fm,Lfk;,fm,-1,false
 @getId,q,db,I,db,-1666216555,false
 @getHead,i,fe,Lfd;,fe,-1,false
 @isMoving,f,v,Z,v,-1,false
@@ -162,3 +165,6 @@ $bj#org/hexbot/core/impl/IMouse
 @getName,v,ah,Ljava/lang/String;,ah,-1,false
 @getActions,x,ah,[Ljava/lang/String;,ah,-1,false
 @getGroundActions,n,ah,[Ljava/lang/String;,ah,-1,false
+@isMembers,w,ah,Z,ah,-1,false
+@getIds,am,ah,[I,ah,-1,false
+@getStacks,ao,ah,[I,ah,-1,false
