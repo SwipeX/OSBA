@@ -34,6 +34,8 @@ $bj#org/hexbot/core/impl/IMouse
 @getXVerticies,b,dc,[I,dc,-1,false
 @getYVerticies,u,dc,[I,dc,-1,false
 @getZVerticies,d,dc,[I,dc,-1,false
+@getMasterX,masterx,fj,I,fj,-1,false
+@getMasterY,mastery,fj,I,fj,-1,false
 @getParent,bl,fj,Lfj;,fj,-1,false
 @getChildren,dv,fj,[Lfj;,fj,-1,false
 @getType,z,fj,I,fj,1802909081,false
@@ -126,9 +128,11 @@ $bj#org/hexbot/core/impl/IMouse
 @getLevel,w,aa,I,aa,-99142993,false
 @getName,b,aa,Ljava/lang/String;,aa,-1,false
 @getActions,t,aa,[Ljava/lang/String;,aa,-1,false
+@getModel,model,az,Ljava/lang/Object;,az,-1,false
 @getX,s,az,I,az,-74784875,false
 @getY,t,az,I,az,-906960355,false
 @getAboveText,ar,az,Ljava/lang/String;,az,-1,false
+@getAnimation,ad,az,I,az,-417459509,false
 @getInteractingIndex,af,az,I,az,-760299985,false
 @getOrientation,r,az,I,az,2000849491,false
 @getPrevious,ci,fd,Lfd;,fd,-1,false
