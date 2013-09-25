@@ -112,7 +112,6 @@ public class Updater implements Runnable {
             }
             for (Hook hook : container.hooks) {
                 FieldNode fn = classnodes.get(hook.clazz).getField(hook.field, null, false);
-
                 boolean isStatic = false;
                 if (fn != null)
                     isStatic = Modifier.isStatic(fn.access);

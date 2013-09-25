@@ -53,7 +53,26 @@ public class EntryPattern {
             }
         }
         return index == entries.length;
-    }
+	}
+
+	public boolean findAt(AbstractInsnNode sub) {
+		int index = 0, radius = 0;
+		while (sub.getNext() != null) {
+			if (index >= entries.length)
+				break;
+			if (radius >= 12) {
+				index = 0;
+				radius = 0;
+			}
+			radius++;
+			if (entries[index].equals(sub)) {
+				entries[index++].setInstance(sub);
+				radius = 0;
+			}
+			sub = sub.getNext();
+		}
+		return index == entries.length;
+	}
 
     public InsnEntry get(int index) {
         return entries[index];

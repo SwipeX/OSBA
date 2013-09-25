@@ -4,32 +4,32 @@ Hooks needed for integration with Hexbot Pro
 [#] IKeyboard
 
      Client
-[]	 int[] getSettings();
-[]	 String[] getMenuOptions();
-[]	 String[] getMenuActions();
-[]	 int CameraX();
-[]	 int CameraY();
-[]	 int CameraZ();
+[#]	 int[] getSettings();
+[#]	 String[] getMenuOptions();
+[#]	 String[] getMenuActions();
+[#]	 int CameraX();
+[#]	 int CameraY();
+[#]	 int CameraZ();
 [#]	 IKeyboard getKeyboard();
 [#]	 IMouse getMouse();
 
      ICharacter
-[]	 int getHp();
-[]	 int getMaxHp();
-[]	 int getAnimation();
+[#]	 int getHp();
+[#]	 int getMaxHp();
+[#]	 int getAnimation();
 
      IWidget
 []	 int getId();
-[]	 String getText();
+[x]	 String getText();
 []	 int[] getSlotIds();
 []	 int[] getStackSizes();
-[]	 int getMasterX();
-[]	 int getMasterY();
+[#]	 int getMasterX();
+[#]	 int getMasterY();
 []	 String getComponentName();
-[]	 int getScrollX();
-[]	 int getScrollY();
-[]	 int getTextureId();
-[]	 int getTextColor();
+[x]	 int getScrollX();
+[x]	 int getScrollY();
+[x]	 int getTextureId();
+[x]	 int getTextColor();
 []	 int getTradeId();
 []	 int getTradeStack();
-[]	 int getBorderThickness();
+[x]	 int getBorderThickness();
