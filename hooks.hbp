@@ -168,6 +168,9 @@ $bj#org/hexbot/core/impl/IMouse
 @getMiddleItem,q,cg,Lcv;,cg,-1,false
 @getTopItem,b,cg,Lcv;,cg,-1,false
 @getHeight,d,cg,I,cg,826596371,false
+@getModel,b,cx,Lcv;,cx,-1,false
+@getX,l,cx,I,cx,-1,false
+@getY,q,cx,I,cx,-1,false
 @getId,v,dy,I,dy,-511209223,false
 @getX,p,dy,I,dy,-1954861293,false
 @getY,i,dy,I,dy,-791708397,false
