@@ -1,13 +1,14 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
-import org.hexbot.updater.search.EntryPattern;
-import org.hexbot.updater.search.InsnEntry;
+import org.hexbot.updater.search.ASMUtil;
+import org.hexbot.updater.search.Identifying;
 import org.hexbot.updater.search.Multipliers;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class Widget extends Container {
@@ -16,38 +17,9 @@ public class Widget extends Container {
 		super(updater);
 	}
 
-	private enum OpcodeHook {
-		TEXT_COLOR(1101, new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I")), 0, 0),
-		TEXTURE_ID(1105, new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I")), 0, 0),
-		TEXT(1112, new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "Ljava/lang/String;")), 0, 0),
-		BORDER_THICKNESS(1116, new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I")), 0, 0),
-		INDEX(1702, new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETFIELD, "I")), 0, 1),
-		SCROLL_X(1100, new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETFIELD, "I")), 0, 1),
-		SCROLL_Y(1601, new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETFIELD, "I")), 0, 1);
-
-		private final int operand;
-		private final EntryPattern pattern;
-		private final int skip;
-		private final int fieldIndex;
-
-		boolean identified;
-
-		OpcodeHook(int operand, EntryPattern pattern, int skip, int fieldIndex) {
-			this.operand = operand;
-			this.pattern = pattern;
-			this.skip = skip;
-			this.fieldIndex = fieldIndex;
-		}
-
-		FieldInsnNode getFieldInsn() {
-			return pattern.get(fieldIndex, FieldInsnNode.class);
-		}
-
-	}
-
 	@Override
 	public int getTotalHookCount() {
-		return 17;
+		return 21;
 	}
 
 	@Override
@@ -67,83 +39,100 @@ public class Widget extends Container {
 	public void transform(ClassNode cn) {
 		addHook("getMasterX", "masterX", cn.name, cn.name, "I", -1);
 		addHook("getMasterY", "masterY", cn.name, cn.name, "I", -1);
-		EntryPattern setters = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "Z"), new InsnEntry(Opcodes.PUTFIELD, "I"),
-				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
-				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
-				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
-				new InsnEntry(Opcodes.PUTFIELD, "I"));
-		FieldNode parent = cn.getField(null, "L" + cn.name + ";", true);
-		FieldNode children = cn.getField(null, "[L" + cn.name + ";", true);
-		if (parent != null)
-			addHook("getParent", parent.name, cn.name, cn.name, getDescriptor(), -1);
-		if (children != null)
-			addHook("getChildren", children.name, cn.name, cn.name, getDescriptor(1), -1);
-		if (setters.find(cn)) {
-			FieldInsnNode type = setters.get(2, FieldInsnNode.class);
-			FieldInsnNode x = setters.get(4, FieldInsnNode.class);
-			FieldInsnNode y = setters.get(6, FieldInsnNode.class);
-			FieldInsnNode width = setters.get(8, FieldInsnNode.class);
-			FieldInsnNode height = setters.get(9, FieldInsnNode.class);
-			FieldInsnNode parentId = setters.get(11, FieldInsnNode.class);
-			addHook("getType", type, cn.name, Multipliers.getMostUsed(type));
-			addHook("getX", x, cn.name, Multipliers.getMostUsed(x));
-			addHook("getY", y, cn.name, Multipliers.getMostUsed(y));
-			addHook("getWidth", width, cn.name, Multipliers.getMostUsed(width));
-			addHook("getHeight", height, cn.name, Multipliers.getMostUsed(height));
-			addHook("getParentId", parentId, cn.name, Multipliers.getMostUsed(parentId));
-		}
-		for (OpcodeHook hook : OpcodeHook.values()) {
-			hook.identified = identifyOpcodeHook(hook.operand, hook.pattern, hook.skip);
-		}
-		if (OpcodeHook.TEXT_COLOR.identified)
-			addHook("getTextColor", OpcodeHook.TEXT_COLOR.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.TEXTURE_ID.identified)
-			addHook("getTextureId", OpcodeHook.TEXTURE_ID.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.TEXT.identified)
-			addHook("getText", OpcodeHook.TEXT.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.BORDER_THICKNESS.identified)
-			addHook("getBorderThickness", OpcodeHook.BORDER_THICKNESS.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.INDEX.identified)
-			addHook("getIndex", OpcodeHook.INDEX.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.SCROLL_X.identified)
-			addHook("getScrollX", OpcodeHook.SCROLL_X.getFieldInsn(), cn.name, -1);
-		if (OpcodeHook.SCROLL_Y.identified)
-			addHook("getScrollY", OpcodeHook.SCROLL_Y.getFieldInsn(), cn.name, -1);
-
-	}
-
-	private boolean identifyOpcodeHook(int operand, EntryPattern p, int skips) {
-		for (ClassNode c : getUpdater().classnodes.values()) {
-			for (MethodNode m : c.methods) {
-				boolean b = identifyOpcodeHook(operand, p, skips, m);
-				if (b)
-					return true;
+		for (FieldNode fn : cn.fields) {
+			if (fn.desc.equals("[L" + cn.name + ";")) {
+				addHook("getComponents", fn.name, cn.name, cn.name, getDescriptor(1), -1);
+			}
+			if (fn.desc.equals("L" + cn.name + ";")) {
+				addHook("getParent", fn.name, cn.name, cn.name, getDescriptor(), -1);
 			}
 		}
-		return false;
+		Collection<ClassNode> cns = getUpdater().classnodes.values();
+		addHook("getX", Identifying.getFieldFromPush(cns, 1500, "I"), true);
+		addHook("getY", Identifying.getFieldFromPush(cns, 1501, "I"), true);
+		addHook("getWidth", Identifying.getFieldFromPush(cns, 1502, "I"), true);
+		addHook("getHeight", Identifying.getFieldFromPush(cns, 1503, "I"), true);
+		addHook("getParentId", Identifying.getFieldFromPush(cns, 1505, "I"), true);
+		addHook("getComponentIndex", Identifying.getFieldFromPush(cns, 1702, "I"), true);
+		addHook("getActions", Identifying.getFieldFromPush(cns, 1801, "[Ljava/lang/String;"), false);
+		addHook("getText", Identifying.getFieldFromPush(cns, 1112, "Ljava/lang/String;"), false);
+		addHook("getComponentName", Identifying.getFieldFromPush(cns, 1802, "Ljava/lang/String;"), false);
+		addHook("getScrollX", Identifying.getFieldFromPush(cns, 1100, "I"), true);
+		addHook("getScrollY", Identifying.getFieldFromPush(cns, 1601, "I"), true);
+		addHook("getTextureId", Identifying.getFieldFromPush(cns, 1105, "I", true), true);
+		addHook("getTextColor", Identifying.getFieldFromPush(cns, 1101, "I", true), true);
+		addHook("getBorderThickness", Identifying.getFieldFromPush(cns, 1116, "I", true), true);
+		locateInv(cn);
+		locateTrade(cn);
+		identifyId(cn);
 	}
 
-	private boolean identifyOpcodeHook(int operand, EntryPattern pattern, int skips, MethodNode m) {
-		AbstractInsnNode current = m.instructions.getFirst();
-		int skip = 0;
-		while (current != null) {
-			if (current.getType() == AbstractInsnNode.INT_INSN) {
-				IntInsnNode intInsn = (IntInsnNode) current;
-				if (intInsn.operand == operand) {
-					AbstractInsnNode sub = current.getNext();
-					while (sub != null) {
-						if (pattern.findAt(sub)) {
-							if (skip >= skips)
-								return true;
-							skip++;
+	private void addHook(String name, FieldInsnNode f, boolean multiply) {
+		addHook(name, f, f.owner, multiply ? Multipliers.getMostUsed(f) : -1);
+	}
+
+	public void locateTrade(ClassNode cn) {
+		for (MethodNode mn : cn.methods) {
+			if (mn.name.equals("<init>")) {
+				AbstractInsnNode[] ains = mn.instructions.toArray();
+				for (int i = 0; i < ains.length; i++) {
+					if (ains[i] instanceof FieldInsnNode) {
+						FieldInsnNode ain = (FieldInsnNode) ains[i];
+						if (ain.getOpcode() == Opcodes.GETSTATIC) {
+							if (ain.getNext() instanceof FieldInsnNode) {
+								FieldInsnNode ain1 = (FieldInsnNode) ain.getNext();
+								if (ain1.getOpcode() == Opcodes.PUTFIELD) {
+									FieldInsnNode id = (FieldInsnNode) ASMUtil.getNext(ain1, FieldInsnNode.class);
+									FieldInsnNode stack = (FieldInsnNode) ASMUtil.getNext(id, FieldInsnNode.class);
+									addHook("getTradeId", id.name, id.owner, cn.name, "I", Multipliers.getMostUsed(id));
+									addHook("getTradeStack", stack.name, stack.owner, cn.name, "I", Multipliers.getMostUsed(stack));
+								}
+							}
 						}
-						sub = sub.getNext();
 					}
 				}
 			}
-			current = current.getNext();
 		}
-		return false;
+	}
+
+	private void identifyId(ClassNode classnode) {
+		for (MethodNode mn : classnode.methods) {
+			if (!mn.name.equals("<init>"))
+				continue;
+			AbstractInsnNode[] ains = mn.instructions.toArray();
+			for (int i = 0; i < ains.length; i++) {
+				if (ains[i] instanceof FieldInsnNode) {
+					FieldInsnNode id = (FieldInsnNode) ains[i];
+					if (id.desc.equals("I")) {
+						addHook("getId", id.name, id.owner, classnode.name, "I", Multipliers.getMostUsed(id));
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	public void locateInv(ClassNode cn) {
+		String first = null;
+		for (MethodNode mn : cn.methods) {
+			if (mn.desc.equals("(III)V")) { //can be a short also
+				for (AbstractInsnNode ain : mn.instructions.toArray()) {
+					if (ain instanceof FieldInsnNode) {
+						if (first == null) {
+							FieldInsnNode fin = (FieldInsnNode) ain;
+							addHook("getSlotIds", fin.name, fin.owner, "[I", cn.name, -1);
+							first = fin.name;
+						} else {
+							FieldInsnNode fin = (FieldInsnNode) ain;
+							if (!fin.name.equals(first)) {
+								addHook("getStackSizes", fin.name, fin.owner, "[I", cn.name, -1);
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -20,7 +20,7 @@ public class Renderable extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 1;
+		return 2;
 	}
 
 

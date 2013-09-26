@@ -19,7 +19,7 @@ public class Character extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 9;
+        return 8;
     }
 
     @Override
