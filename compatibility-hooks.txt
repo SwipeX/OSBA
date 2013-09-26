@@ -19,17 +19,17 @@ Hooks needed for integration with Hexbot Pro
 [#]	 int getAnimation();
 
      IWidget
-[]	 int getId();
+[x]	 int getId();
 [x]	 String getText();
-[]	 int[] getSlotIds();
-[]	 int[] getStackSizes();
+[x]	 int[] getSlotIds();
+[x]	 int[] getStackSizes();
 [#]	 int getMasterX();
 [#]	 int getMasterY();
-[]	 String getComponentName();
+[x]	 String getComponentName();
 [x]	 int getScrollX();
 [x]	 int getScrollY();
 [x]	 int getTextureId();
 [x]	 int getTextColor();
-[]	 int getTradeId();
-[]	 int getTradeStack();
+[x]	 int getTradeId();
+[x]	 int getTradeStack();
 [x]	 int getBorderThickness();

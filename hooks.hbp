@@ -52,6 +52,8 @@ $bj#org/hexbot/core/impl/IMouse
 @getTextureId,ak,fj,I,fj,-1886775029,false
 @getTextColor,aq,fj,I,fj,-1729844225,false
 @getBorderThickness,ah,fj,I,fj,504825455,false
+@getSlotIds,dz,fj,[I,fj,-1,false
+@getStackSizes,dj,fj,[I,fj,-1,false
 @getTradeId,dx,fj,I,fj,-988172459,false
 @getTradeStack,dk,fj,I,fj,1911995401,false
 @getId,f,fj,I,fj,1927800497,false

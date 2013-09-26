@@ -8,6 +8,7 @@ import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class Widget extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 21;
+		return 23;
 	}
 
 	@Override
@@ -47,11 +48,13 @@ public class Widget extends Container {
 				addHook("getParent", fn.name, cn.name, cn.name, getDescriptor(), -1);
 			}
 		}
+		FieldInsnNode width = null;
+		FieldInsnNode height = null;
 		Collection<ClassNode> cns = getUpdater().classnodes.values();
 		addHook("getX", Identifying.getFieldFromPush(cns, 1500, "I"), true);
 		addHook("getY", Identifying.getFieldFromPush(cns, 1501, "I"), true);
-		addHook("getWidth", Identifying.getFieldFromPush(cns, 1502, "I"), true);
-		addHook("getHeight", Identifying.getFieldFromPush(cns, 1503, "I"), true);
+		addHook("getWidth", width = Identifying.getFieldFromPush(cns, 1502, "I"), true);
+		addHook("getHeight", height = Identifying.getFieldFromPush(cns, 1503, "I"), true);
 		addHook("getParentId", Identifying.getFieldFromPush(cns, 1505, "I"), true);
 		addHook("getComponentIndex", Identifying.getFieldFromPush(cns, 1702, "I"), true);
 		addHook("getActions", Identifying.getFieldFromPush(cns, 1801, "[Ljava/lang/String;"), false);
@@ -62,12 +65,14 @@ public class Widget extends Container {
 		addHook("getTextureId", Identifying.getFieldFromPush(cns, 1105, "I", true), true);
 		addHook("getTextColor", Identifying.getFieldFromPush(cns, 1101, "I", true), true);
 		addHook("getBorderThickness", Identifying.getFieldFromPush(cns, 1116, "I", true), true);
-		locateInv(cn);
+		locateInv(cn, width, height);
 		locateTrade(cn);
 		identifyId(cn);
 	}
 
 	private void addHook(String name, FieldInsnNode f, boolean multiply) {
+		if (f == null)
+			return;
 		addHook(name, f, f.owner, multiply ? Multipliers.getBest(f) : -1);
 	}
 
@@ -112,24 +117,49 @@ public class Widget extends Container {
 		}
 	}
 
-	public void locateInv(ClassNode cn) {
-		String first = null;
+	public void locateInv(ClassNode cn, FieldInsnNode width, FieldInsnNode height) {
+		if (width == null || height == null) return;
+		int hook = 0;
 		for (MethodNode mn : cn.methods) {
-			if (mn.desc.equals("(III)V")) { //can be a short also
-				for (AbstractInsnNode ain : mn.instructions.toArray()) {
-					if (ain instanceof FieldInsnNode) {
-						if (first == null) {
-							FieldInsnNode fin = (FieldInsnNode) ain;
-							addHook("getSlotIds", fin.name, fin.owner, "[I", cn.name, -1);
-							first = fin.name;
-						} else {
-							FieldInsnNode fin = (FieldInsnNode) ain;
-							if (!fin.name.equals(first)) {
-								addHook("getStackSizes", fin.name, fin.owner, "[I", cn.name, -1);
-								return;
+			if (Modifier.isStatic(mn.access))
+				continue;
+			int i = 0;
+			for (AbstractInsnNode node : mn.instructions.toArray()) {
+				if (node.getType() != AbstractInsnNode.FIELD_INSN) {
+					continue;
+				}
+				FieldInsnNode f = (FieldInsnNode) node;
+				if (!f.owner.equals(cn.name)) {
+					i = 0;
+					continue;
+				}
+				switch (i) {
+					case 0:
+						if (f.getOpcode() == Opcodes.GETFIELD && f.name.equals(width.name)) {
+							i++;
+						} else i = 0;
+						break;
+					case 1:
+						if (f.getOpcode() == Opcodes.GETFIELD && f.name.equals(height.name)) {
+							i++;
+						} else i = 0;
+						break;
+					case 2:
+						if (f.getPrevious().getOpcode() == Opcodes.NEWARRAY && f.getOpcode() == Opcodes.PUTFIELD && f.desc.equals("[I")) {
+							i = 0;
+							switch (hook) {
+								case 0:
+									addHook("getSlotIds", f, false);
+									break;
+								case 1:
+									addHook("getStackSizes", f, false);
+									return;
 							}
-						}
-					}
+							hook++;
+						} else i = 0;
+						break;
+					default:
+						i = 0;
 				}
 			}
 		}
