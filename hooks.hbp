@@ -160,6 +160,12 @@ $bj#org/hexbot/core/impl/IMouse
 @getOrientation,r,az,I,az,2000849491,false
 @getHealth,av,az,I,az,-1472068590,false
 @getMaxHealth,au,az,I,az,-1,false
+@getHitDamages,ah,az,[I,az,-1,false
+@getHitTypes,am,az,[I,az,-1,false
+@getHitCycles,ao,az,[I,az,-1,false
+@getQueueX,by,az,[I,az,-1,false
+@getQueueY,bl,az,[I,az,-1,false
+@getQueueRun,bo,az,[Z,az,-1,false
 @getPrevious,ci,fd,Lorg/hexbot/core/impl/ICacheableNode;,fd,-1,false
 @getNext,ch,fd,Lorg/hexbot/core/impl/ICacheableNode;,fd,-1,false
 @getSceneObjects,f,cw,[Lorg/hexbot/core/impl/IInteractableObject;,cw,-1,false
