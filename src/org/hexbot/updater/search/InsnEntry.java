@@ -88,4 +88,13 @@ public class InsnEntry {
 		}
 		return false;
 	}
+
+	public boolean contained (MethodNode m) {
+		for (AbstractInsnNode node : m.instructions.toArray()) {
+			if (this.equals(node))
+				return true;
+		}
+		return false;
+	}
+
 }
