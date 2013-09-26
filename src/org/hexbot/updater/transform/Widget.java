@@ -68,7 +68,7 @@ public class Widget extends Container {
 	}
 
 	private void addHook(String name, FieldInsnNode f, boolean multiply) {
-		addHook(name, f, f.owner, multiply ? Multipliers.getMostUsed(f) : -1);
+		addHook(name, f, f.owner, multiply ? Multipliers.getBest(f) : -1);
 	}
 
 	public void locateTrade(ClassNode cn) {
@@ -84,8 +84,8 @@ public class Widget extends Container {
 								if (ain1.getOpcode() == Opcodes.PUTFIELD) {
 									FieldInsnNode id = (FieldInsnNode) ASMUtil.getNext(ain1, FieldInsnNode.class);
 									FieldInsnNode stack = (FieldInsnNode) ASMUtil.getNext(id, FieldInsnNode.class);
-									addHook("getTradeId", id.name, id.owner, cn.name, "I", Multipliers.getMostUsed(id));
-									addHook("getTradeStack", stack.name, stack.owner, cn.name, "I", Multipliers.getMostUsed(stack));
+									addHook("getTradeId", id.name, id.owner, cn.name, "I", Multipliers.getBest(id));
+									addHook("getTradeStack", stack.name, stack.owner, cn.name, "I", Multipliers.getBest(stack));
 								}
 							}
 						}
@@ -104,7 +104,7 @@ public class Widget extends Container {
 				if (ains[i] instanceof FieldInsnNode) {
 					FieldInsnNode id = (FieldInsnNode) ains[i];
 					if (id.desc.equals("I")) {
-						addHook("getId", id.name, id.owner, classnode.name, "I", Multipliers.getMostUsed(id));
+						addHook("getId", id.name, id.owner, classnode.name, "I", Multipliers.getBest(id));
 						return;
 					}
 				}

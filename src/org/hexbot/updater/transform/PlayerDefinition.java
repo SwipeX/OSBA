@@ -46,7 +46,7 @@ public class PlayerDefinition extends Container {
 			addHook("getAppearanceIndices", idx.name, idx.owner, idx.owner, idx.desc, -1);
 		}
 		FieldNode id = cn.getField(null, "I");
-		addHook("getNpcId", id.name, cn.name, cn.name, id.desc, Multipliers.getMostUsed(cn, id));
+		addHook("getNpcId", id.name, cn.name, cn.name, id.desc, Multipliers.getBest(cn, id));
 		FieldNode female = cn.getField(null, "Z");
 		addHook("isFemale", female.name, cn.name, cn.name, female.desc, -1);
 	}

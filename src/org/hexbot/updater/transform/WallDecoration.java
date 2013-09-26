@@ -40,15 +40,15 @@ public class WallDecoration extends Container {
     @Override
     public void transform(ClassNode cn) {
 	    FieldNode id = cn.getPublicField(null, "I");
-	    addHook("getId", id.name, cn.name, cn.name, id.desc, Multipliers.getMostUsed(cn, id));
+	    addHook("getId", id.name, cn.name, cn.name, id.desc, Multipliers.getBest(cn, id));
         ClassNode region = updater.classnodes.get(CLASS_MATCHES.get("Region"));
 	    EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.SIPUSH, "256"),
 			    new InsnEntry(Opcodes.GETFIELD, "I", cn.name), new InsnEntry(Opcodes.GETFIELD, "I", cn.name));
 	    if (pattern.find(region)) {
 		    FieldInsnNode x = (FieldInsnNode) pattern.get(1).getInstance();
 		    FieldInsnNode y = (FieldInsnNode) pattern.get(2).getInstance();
-		    addHook("getX", x.name, x.owner, cn.name, x.desc, Multipliers.getSurrounding(x));
-		    addHook("getY", y.name, y.owner, cn.name, y.desc, Multipliers.getSurrounding(y));
+		    addHook("getX", x.name, x.owner, cn.name, x.desc, Multipliers.getBest(x));
+		    addHook("getY", y.name, y.owner, cn.name, y.desc, Multipliers.getBest(y));
 	    }
     }
 }

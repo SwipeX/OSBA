@@ -44,7 +44,7 @@ public class Player extends Container {
 				new InsnEntry(Opcodes.GETFIELD, "L" + CLASS_MATCHES.get("PlayerDefinition") + ";"));
 		if (ep.find(cn)) {
 			FieldInsnNode lvl = (FieldInsnNode) ep.get(0).getInstance();
-			addHook("getLevel", lvl.name, lvl.owner, lvl.owner, lvl.desc, Multipliers.getMostUsed(lvl));
+			addHook("getLevel", lvl.name, lvl.owner, lvl.owner, lvl.desc, Multipliers.getBest(lvl));
 		}
 		ClassNode client = updater.classnodes.get("client");
 		EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I", cn.name),
@@ -52,7 +52,7 @@ public class Player extends Container {
 				new InsnEntry(Opcodes.PUTFIELD, "L" + CLASS_MATCHES.get("Model") + ";"));
 		if (ep1.find(client)) {
 			FieldInsnNode skull = (FieldInsnNode) ep1.get(2).getInstance();
-			addHook("getSkullIcon", skull.name, skull.owner, cn.name, skull.desc, Multipliers.getMostUsed(skull));
+			addHook("getSkullIcon", skull.name, skull.owner, cn.name, skull.desc, Multipliers.getBest(skull));
 		}
 	}
 }

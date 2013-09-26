@@ -57,11 +57,11 @@ public class TileData extends Container {
 			    FieldInsnNode fin = (FieldInsnNode) ain;
 			    if (fin == null) break;
 			    if (iin.var == 1) {
-				    addHook("getPlane", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
+				    addHook("getPlane", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
 			    } else if (iin.var == 2) {
-				    addHook("getX", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
+				    addHook("getX", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
 			    } else if (iin.var == 3) {
-				    addHook("getY", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
+				    addHook("getY", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
 				    break;
 			    }
 		    }

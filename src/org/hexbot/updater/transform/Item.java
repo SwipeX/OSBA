@@ -41,9 +41,9 @@ public class Item extends Container {
                 new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.ARETURN));
         if (ep1.find(cn)) {
             FieldInsnNode id = ep1.get(0, FieldInsnNode.class);
-            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getMostUsed(id));
+            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getBest(id));
             FieldInsnNode stack = ep1.get(2, FieldInsnNode.class);
-            addHook("getStackSize", stack.name, stack.owner, stack.owner, stack.desc, Multipliers.getMostUsed(stack));
+            addHook("getStackSize", stack.name, stack.owner, stack.owner, stack.desc, Multipliers.getBest(stack));
         }
     }
 }

@@ -42,7 +42,7 @@ public class FloorDecoration extends Container {
         EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "L" + cn.name + ";"), new InsnEntry(Opcodes.GETFIELD, "I"));
         if (ep.find(region, "(III)I")) {
             FieldInsnNode id = (FieldInsnNode) ep.get(1).getInstance();
-            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getSurrounding(id));
+            addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getBest(id));
         }
 		String render = "L" + CLASS_MATCHES.get("Renderable") + ";";
 		FieldNode renderable = cn.getField(null, render);

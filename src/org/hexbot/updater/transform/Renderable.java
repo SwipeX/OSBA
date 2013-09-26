@@ -50,7 +50,7 @@ public class Renderable extends Container {
 				EntryPattern height = new EntryPattern(new InsnEntry(Opcodes.LDC), new InsnEntry(Opcodes.PUTFIELD, "I"));
 				if (height.find(m)) {
 					FieldInsnNode modelHeight = height.get(1, FieldInsnNode.class);
-					addHook("getModelHeight", modelHeight.name, modelHeight.owner, modelHeight.owner, "I", Multipliers.getMostUsed(modelHeight));
+					addHook("getModelHeight", modelHeight.name, modelHeight.owner, modelHeight.owner, "I", Multipliers.getBest(modelHeight));
 				}
 			}
 		}

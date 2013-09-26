@@ -41,13 +41,13 @@ public class NpcDefinition extends Container {
 				new InsnEntry(Opcodes.INVOKEVIRTUAL), new InsnEntry(Opcodes.CHECKCAST));
 		if (idPattern.find(cn)) {
 			FieldInsnNode id = idPattern.get(0, FieldInsnNode.class);
-			addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getMostUsed(id));
+			addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getBest(id));
 		}
 
 		EntryPattern levelPattern = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "95"), new InsnEntry(Opcodes.PUTFIELD, "I"));
 		if (levelPattern.find(cn)) {
 			FieldInsnNode level = levelPattern.get(1, FieldInsnNode.class);
-			addHook("getLevel", level.name, level.owner, level.owner, level.desc, Multipliers.getMostUsed(level));
+			addHook("getLevel", level.name, level.owner, level.owner, level.desc, Multipliers.getBest(level));
 		}
 
 		EntryPattern namePattern = new EntryPattern(new InsnEntry(Opcodes.LDC, "null"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;"));

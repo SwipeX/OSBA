@@ -45,8 +45,8 @@ public class CollisionMap extends Container {
 		if (pattern.find(cn)) {
 			FieldInsnNode x = (FieldInsnNode) pattern.get(0).getInstance();
 			FieldInsnNode y = (FieldInsnNode) pattern.get(1).getInstance();
-			addHook("getOffsetX", x.name, x.owner, cn.name, x.desc, Multipliers.getSurrounding(x));
-			addHook("getOffsetY", y.name, y.owner, cn.name, y.desc, Multipliers.getSurrounding(y));
+			addHook("getOffsetX", x.name, x.owner, cn.name, x.desc, Multipliers.getBest(x));
+			addHook("getOffsetY", y.name, y.owner, cn.name, y.desc, Multipliers.getBest(y));
 		}
 	}
 }

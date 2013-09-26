@@ -56,8 +56,8 @@ public class Projectile extends Container {
 				if (fin.owner.equals(cn.name) && fin.desc.equals("I")) {
 					FieldInsnNode x = (FieldInsnNode) ASMUtil.getNext(fin, Opcodes.GETFIELD);
 					FieldInsnNode y = (FieldInsnNode) ASMUtil.getNext(x, Opcodes.GETFIELD);
-					addHook("getX", x.name, x.owner, cn.name, x.desc, Multipliers.getMostUsed(x));
-					addHook("getY", y.name, y.owner, cn.name, y.desc, Multipliers.getMostUsed(y));
+					addHook("getX", x.name, x.owner, cn.name, x.desc, Multipliers.getBest(x));
+					addHook("getY", y.name, y.owner, cn.name, y.desc, Multipliers.getBest(y));
 					break;
 				}
 			}
@@ -86,7 +86,7 @@ public class Projectile extends Container {
 			if (second != null && second instanceof FieldInsnNode) {
 				FieldInsnNode fin = (FieldInsnNode) second;
 				if (fin.owner.equals(cn.name) && fin.desc.equals("I")) {
-					addHook("getId", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getMostUsed(fin));
+					addHook("getId", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
 					break;
 				}
 			}

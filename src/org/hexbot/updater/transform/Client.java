@@ -86,7 +86,7 @@ public class Client extends Container {
                     new InsnEntry(Opcodes.SIPUSH, "3321"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
             if (pattern.find(cn)) {
                 FieldInsnNode energy = pattern.get(2, FieldInsnNode.class);
-                addHook("getEnergy", energy.name, energy.owner, "client", "I", Multipliers.getSurrounding(energy));
+                addHook("getEnergy", energy.name, energy.owner, "client", "I", Multipliers.getBest(energy));
                 return;
             }
         }
@@ -100,7 +100,7 @@ public class Client extends Container {
                     LdcInsnNode lin = (LdcInsnNode) ain;
                     if (lin.cst.equals("js5connect")) {
                         FieldInsnNode fin = (FieldInsnNode) ASMUtil.getPrevious(lin, FieldInsnNode.class);
-                        addHook("getGameState", fin.name, fin.owner, "client", "I", Multipliers.getSurrounding(fin));
+                        addHook("getGameState", fin.name, fin.owner, "client", "I", Multipliers.getBest(fin));
                         return;
                     }
                 }
@@ -116,15 +116,15 @@ public class Client extends Container {
             FieldInsnNode open = pattern.get(0, FieldInsnNode.class);
             addHook("isMenuOpen", open.name, open.owner, "client", "Z", -1);
             FieldInsnNode x = pattern.get(1, FieldInsnNode.class);
-            addHook("getMenuX", x.name, x.owner, "client", "I", Multipliers.getSurrounding(x));
+            addHook("getMenuX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(2, FieldInsnNode.class);
-            addHook("getMenuY", y.name, y.owner, "client", "I", Multipliers.getSurrounding(y));
+            addHook("getMenuY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
             FieldInsnNode width = pattern.get(3, FieldInsnNode.class);
-            addHook("getMenuWidth", width.name, width.owner, "client", "I", Multipliers.getSurrounding(width));
+            addHook("getMenuWidth", width.name, width.owner, "client", "I", Multipliers.getBest(width));
             FieldInsnNode height = pattern.get(4, FieldInsnNode.class);
-            addHook("getMenuHeight", height.name, height.owner, "client", "I", Multipliers.getSurrounding(height));
+            addHook("getMenuHeight", height.name, height.owner, "client", "I", Multipliers.getBest(height));
             FieldInsnNode count = pattern.get(8, FieldInsnNode.class);
-            addHook("getMenuCount", count.name, count.owner, "client", "I", Multipliers.getSurrounding(count));
+            addHook("getMenuCount", count.name, count.owner, "client", "I", Multipliers.getBest(count));
         }
 
     }
@@ -148,9 +148,9 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC), new InsnEntry(Opcodes.GETSTATIC));
         if (pattern.find(cn, "(Z)V")) {
             FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
-            addHook("getDestinationX", x.name, x.owner, "client", "I", Multipliers.getSurrounding(x));
+            addHook("getDestinationX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(4, FieldInsnNode.class);
-            addHook("getDestinationY", y.name, y.owner, "client", "I", Multipliers.getSurrounding(y));
+            addHook("getDestinationY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
     }
 
@@ -176,7 +176,7 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.ACONST_NULL));
         if (pattern.find(cn)) {
             FieldInsnNode index = pattern.get(0, FieldInsnNode.class);
-            addHook("getPlayerIndex", index.name, index.owner, "client", "I", Multipliers.getSurrounding(index));
+            addHook("getPlayerIndex", index.name, index.owner, "client", "I", Multipliers.getBest(index));
         }
     }
     private void settings() {
@@ -201,7 +201,7 @@ public class Client extends Container {
                 FieldInsnNode username = pattern.get(3, FieldInsnNode.class);
                 FieldInsnNode password = pattern.get(5, FieldInsnNode.class);
                 FieldInsnNode loggedIn = pattern.get(7, FieldInsnNode.class);
-                addHook("getLoginIndex", loginIndex.name, loginIndex.owner, "client", "I", Multipliers.getGlobal().getField(loginIndex).getMostUsed());
+                addHook("getLoginIndex", loginIndex.name, loginIndex.owner, "client", "I", Multipliers.getBest(loginIndex));
                 addHook("getUsername", username.name, username.owner, "client", "Ljava/lang/String;", -1);
                 addHook("getPassword", password.name, password.owner, "client", "Ljava/lang/String;", -1);
                 addHook("isLoggedIn", loggedIn.name, loggedIn.owner, "client", "Z", -1);
@@ -260,7 +260,7 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
             FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
-            addHook("getPlane", index.name, index.owner, "client", "I", Multipliers.getSurrounding(index));
+            addHook("getPlane", index.name, index.owner, "client", "I", Multipliers.getBest(index));
         }
     }
 
@@ -269,19 +269,19 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
             FieldInsnNode x = pattern.get(4, FieldInsnNode.class);
-            addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getSurrounding(x));
+            addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode z = pattern.get(5, FieldInsnNode.class);
-            addHook("getCameraZ", z.name, z.owner, "client", "I", Multipliers.getSurrounding(z));
+            addHook("getCameraZ", z.name, z.owner, "client", "I", Multipliers.getBest(z));
             FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
-            addHook("getCameraY", y.name, y.owner, "client", "I", Multipliers.getSurrounding(y));
+            addHook("getCameraY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
         EntryPattern pattern1 = new EntryPattern(new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.SIPUSH, "2047"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern1.find(cn)) {
             FieldInsnNode pitch = pattern1.get(2, FieldInsnNode.class);
-            addHook("getPitch", pitch.name, pitch.owner, "client", "I", Multipliers.getSurrounding(pitch));
+            addHook("getPitch", pitch.name, pitch.owner, "client", "I", Multipliers.getBest(pitch));
             FieldInsnNode yaw = pattern1.get(3, FieldInsnNode.class);
-            addHook("getYaw", yaw.name, yaw.owner, "client", "I", Multipliers.getSurrounding(yaw));
+            addHook("getYaw", yaw.name, yaw.owner, "client", "I", Multipliers.getBest(yaw));
         }
     }
 
@@ -290,9 +290,9 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
             FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
-            addHook("getBaseX", x.name, x.owner, "client", "I", Multipliers.getSurrounding(x));
+            addHook("getBaseX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(5, FieldInsnNode.class);
-            addHook("getBaseY", y.name, y.owner, "client", "I", Multipliers.getSurrounding(y));
+            addHook("getBaseY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
     }
 }
