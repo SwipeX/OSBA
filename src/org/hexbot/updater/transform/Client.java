@@ -111,7 +111,7 @@ public class Client extends Container {
     private void menuHooks() {
         EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.PUTSTATIC, "Z"), new InsnEntry(Opcodes.GETSTATIC, "I"),
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"),
-                new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+                new InsnEntry(Opcodes.INVOKESTATIC));
         if (pattern.find(cn)) {
             FieldInsnNode open = pattern.get(0, FieldInsnNode.class);
             addHook("isMenuOpen", open.name, open.owner, "client", "Z", -1);
@@ -123,10 +123,8 @@ public class Client extends Container {
             addHook("getMenuWidth", width.name, width.owner, "client", "I", Multipliers.getBest(width));
             FieldInsnNode height = pattern.get(4, FieldInsnNode.class);
             addHook("getMenuHeight", height.name, height.owner, "client", "I", Multipliers.getBest(height));
-            FieldInsnNode count = pattern.get(8, FieldInsnNode.class);
-            addHook("getMenuCount", count.name, count.owner, "client", "I", Multipliers.getBest(count));
         }
-
+     //TODO menu count
     }
 
     private void menuText() {
