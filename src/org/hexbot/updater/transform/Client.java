@@ -270,18 +270,18 @@ public class Client extends Container {
         if (pattern.find(cn)) {
             FieldInsnNode x = pattern.get(4, FieldInsnNode.class);
             addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
-            FieldInsnNode z = pattern.get(5, FieldInsnNode.class);
+			FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
+			addHook("getCameraY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+			FieldInsnNode z = pattern.get(5, FieldInsnNode.class);
             addHook("getCameraZ", z.name, z.owner, "client", "I", Multipliers.getBest(z));
-            FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
-            addHook("getCameraY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
         EntryPattern pattern1 = new EntryPattern(new InsnEntry(Opcodes.INVOKESTATIC), new InsnEntry(Opcodes.SIPUSH, "2047"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern1.find(cn)) {
-            FieldInsnNode pitch = pattern1.get(2, FieldInsnNode.class);
+			FieldInsnNode yaw = pattern1.get(2, FieldInsnNode.class);
+			addHook("getYaw", yaw.name, yaw.owner, "client", "I", Multipliers.getBest(yaw));
+            FieldInsnNode pitch = pattern1.get(3, FieldInsnNode.class);
             addHook("getPitch", pitch.name, pitch.owner, "client", "I", Multipliers.getBest(pitch));
-            FieldInsnNode yaw = pattern1.get(3, FieldInsnNode.class);
-            addHook("getYaw", yaw.name, yaw.owner, "client", "I", Multipliers.getBest(yaw));
         }
     }
 
@@ -289,9 +289,9 @@ public class Client extends Container {
         EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[I"),
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
-            FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
+            FieldInsnNode x = pattern.get(5, FieldInsnNode.class);
             addHook("getBaseX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
-            FieldInsnNode y = pattern.get(5, FieldInsnNode.class);
+            FieldInsnNode y = pattern.get(3, FieldInsnNode.class);
             addHook("getBaseY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
     }
