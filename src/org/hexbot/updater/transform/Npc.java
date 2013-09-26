@@ -32,6 +32,6 @@ public class Npc extends Container {
 	@Override
 	public void transform(ClassNode cn) {
 		FieldNode def = cn.getField(null, "L" + CLASS_MATCHES.get("NpcDefinition") + ";");
-		addHook("getDefinition", def.name, cn.name, cn.name, def.desc, -1);
+		addHook("getDefinition", def.name, cn.name, cn.name, getUpdater().getContainer(NpcDefinition.class).getDescriptor(), -1);
 	}
 }

@@ -40,11 +40,11 @@ public class TileData extends Container {
 	    FieldNode walls = cn.getField(null, "L" + CLASS_MATCHES.get("WallDecoration") + ";");
 	    FieldNode boundary = cn.getField(null, "L" + CLASS_MATCHES.get("Boundary") + ";");
 	    FieldNode layer = cn.getField(null, "L" + CLASS_MATCHES.get("ItemLayer") + ";");
-	    addHook("getSceneObjects", objects.name, cn.name, cn.name, objects.desc, -1);
-	    addHook("getFloorDecoration", floors.name, cn.name, cn.name, floors.desc, -1);
-	    addHook("getWallObject", walls.name, cn.name, cn.name, walls.desc, -1);
-	    addHook("getBoundary", boundary.name, cn.name, cn.name, boundary.desc, -1);
-	    addHook("getItemLayer", layer.name, cn.name, cn.name, layer.desc, -1);
+	    addHook("getSceneObjects", objects.name, cn.name, cn.name, getUpdater().getContainer(InteractableObject.class).getDescriptor(1), -1);
+	    addHook("getFloorDecoration", floors.name, cn.name, cn.name, getUpdater().getContainer(FloorDecoration.class).getDescriptor(), -1);
+	    addHook("getWallObject", walls.name, cn.name, cn.name, getUpdater().getContainer(WallDecoration.class).getDescriptor(), -1);
+	    addHook("getBoundary", boundary.name, cn.name, cn.name, getUpdater().getContainer(Boundary.class).getDescriptor(), -1);
+	    addHook("getItemLayer", layer.name, cn.name, cn.name, getUpdater().getContainer(ItemLayer.class).getDescriptor(), -1);
 	    MethodNode init = cn.getMethod("<init>", null);
 	    for (AbstractInsnNode ain : init.instructions.toArray()) {
 		    if (ain.getOpcode() == Opcodes.ILOAD) {

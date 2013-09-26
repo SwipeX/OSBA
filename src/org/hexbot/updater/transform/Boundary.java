@@ -40,7 +40,7 @@ public class Boundary extends Container {
 		ClassNode region = updater.classnodes.get(CLASS_MATCHES.get("Region"));
 		String render = "L" + CLASS_MATCHES.get("Renderable") + ";";
 		FieldNode renderable = cn.getField(null, render);
-		addHook("getModel", renderable.name, cn.name, cn.name, renderable.desc, -1);
+		addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Renderable.class).getDescriptor(), -1);
 		EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, render, cn.name),
 				new InsnEntry(Opcodes.PUTFIELD, "I", cn.name), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
 		if (ep1.find(region)) {

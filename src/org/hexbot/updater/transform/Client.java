@@ -37,31 +37,31 @@ public class Client extends Container {
         for (ClassNode cl : updater.classnodes.values()) {
             for (FieldNode fieldNode : cl.fields) {
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Mouse") + ";")) {
-                    addHook("getMouse", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getMouse", fieldNode.name, cl.name, "client", getUpdater().getContainer(Mouse.class).getDescriptor(), -1);
                 }
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Keyboard") + ";")) {
-                    addHook("getKeyboard", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getKeyboard", fieldNode.name, cl.name, "client", getUpdater().getContainer(Keyboard.class).getDescriptor(), -1);
                 }
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Player") + ";")) {
-                    addHook("getLocalPlayer", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getLocalPlayer", fieldNode.name, cl.name, "client", getUpdater().getContainer(Player.class).getDescriptor(), -1);
                 }
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("Player") + ";")) {
-                    addHook("getPlayers", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getPlayers", fieldNode.name, cl.name, "client", getUpdater().getContainer(Player.class).getDescriptor(1), -1);
                 }
                 if (fieldNode.desc.equals("[[[L" + CLASS_MATCHES.get("NodeDeque") + ";")) {
-                    addHook("getGroundItems", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getGroundItems", fieldNode.name, cl.name, "client", getUpdater().getContainer(NodeDeque.class).getDescriptor(3), -1);
                 }
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("Npc") + ";")) {
-                    addHook("getNpcs", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getNpcs", fieldNode.name, cl.name, "client", getUpdater().getContainer(Npc.class).getDescriptor(1), -1);
                 }
                 if (fieldNode.desc.equals("[L" + CLASS_MATCHES.get("CollisionMap") + ";")) {
-                    addHook("getCollisionMaps", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getCollisionMaps", fieldNode.name, cl.name, "client", getUpdater().getContainer(CollisionMap.class).getDescriptor(1), -1);
                 }
                 if (fieldNode.desc.equals("[[L" + CLASS_MATCHES.get("Widget") + ";")) {
-                    addHook("getWidgets", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getWidgets", fieldNode.name, cl.name, "client", getUpdater().getContainer(Widget.class).getDescriptor(2), -1);
                 }
                 if (fieldNode.desc.equals("L" + CLASS_MATCHES.get("Region") + ";")) {
-                    addHook("getRegion", fieldNode.name, cl.name, "client", fieldNode.desc, -1);
+                    addHook("getRegion", fieldNode.name, cl.name, "client", getUpdater().getContainer(Region.class).getDescriptor(), -1);
                 }
             }
         }

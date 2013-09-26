@@ -37,7 +37,6 @@ public class Character extends Container {
 
     @Override
     public void transform(ClassNode cn) {
-        addHook("getModel", "model", cn.name, cn.name, "Ljava/lang/Object;", -1);
         EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "[I"), new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I"),
                 new InsnEntry(Opcodes.GETFIELD, "[I"), new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN));
         ep.find(cn);

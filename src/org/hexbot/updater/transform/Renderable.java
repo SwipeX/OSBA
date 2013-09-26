@@ -39,6 +39,7 @@ public class Renderable extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
+		addHook("getModel", "model", cn.name, cn.name, "Ljava/lang/Object;", -1);
 		/**
 		 * Renderable() {
 		 * 		modelHeight = 0;

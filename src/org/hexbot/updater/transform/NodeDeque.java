@@ -38,10 +38,10 @@ public class NodeDeque extends Container {
 				if (ain.getOpcode() != Opcodes.PUTFIELD) continue;
 				FieldInsnNode fin = (FieldInsnNode) ain;
 				if (fin.owner.equals(cn.name)) {
-					addHook("getCurrent", fin.name, fin.owner, cn.name, fin.desc, -1);
+					addHook("getCurrent", fin.name, fin.owner, cn.name, getUpdater().getContainer(Node.class).getDescriptor(), -1);
 					for (FieldNode fn : cn.fields) {
 						if (fn.name.equals(fin.name) || (fn.access & Opcodes.ACC_STATIC) == Opcodes.ACC_STATIC) continue;
-						addHook("getHead", fn.name, cn.name, cn.name, fn.desc, -1);
+						addHook("getHead", fn.name, cn.name, cn.name, getUpdater().getContainer(Node.class).getDescriptor(), -1);
 						break;
 					}
 					return;

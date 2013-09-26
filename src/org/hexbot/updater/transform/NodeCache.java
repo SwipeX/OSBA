@@ -40,9 +40,9 @@ public class NodeCache extends Container {
 		FieldNode node = cn.getField(null, "L" + CLASS_MATCHES.get("CacheableNode") + ";");
 		FieldNode hashtable = cn.getField(null, "L" + CLASS_MATCHES.get("NodeHashTable") + ";");
 		FieldNode deque = cn.getField(null, "L" + CLASS_MATCHES.get("CacheableNodeDeque") + ";");
-		addHook("getNode", node.name, cn.name, cn.name, node.desc, -1);
-		addHook("getTable", hashtable.name, cn.name, cn.name, hashtable.desc, -1);
-		addHook("getDeque", deque.name, cn.name, cn.name, deque.desc, -1);
+		addHook("getNode", node.name, cn.name, cn.name, getUpdater().getContainer(CacheableNode.class).getDescriptor(), -1);
+		addHook("getTable", hashtable.name, cn.name, cn.name, getUpdater().getContainer(NodeHashTable.class).getDescriptor(), -1);
+		addHook("getDeque", deque.name, cn.name, cn.name, getUpdater().getContainer(CacheableNodeDeque.class).getDescriptor(), -1);
 		EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.INVOKESPECIAL, "<init>"),
 				new InsnEntry(Opcodes.GETFIELD, "I", cn.name), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
 		if (pattern.find(cn)) {

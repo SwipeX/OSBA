@@ -37,10 +37,10 @@ public class Region extends Container {
     public void transform(ClassNode classNode) {
         for (FieldNode fn : classNode.fields) {
             if (fn.desc.equals("[[[L" + CLASS_MATCHES.get("TileData") + ";")) {
-                addHook("getGroundData", fn.name, classNode.name, classNode.name, fn.desc, -1);
+                addHook("getGroundData", fn.name, classNode.name, classNode.name, getUpdater().getContainer(TileData.class).getDescriptor(3), -1);
             }
             if (fn.desc.equals("[L" + CLASS_MATCHES.get("InteractableObject") + ";") && ASMUtil.access(fn, Opcodes.ACC_STATIC)) {
-                addHook("getSceneObjectCache", fn.name, classNode.name, classNode.name, fn.desc, -1);
+                addHook("getSceneObjectCache", fn.name, classNode.name, classNode.name, getUpdater().getContainer(InteractableObject.class).getDescriptor(1), -1);
             }
         }
     }

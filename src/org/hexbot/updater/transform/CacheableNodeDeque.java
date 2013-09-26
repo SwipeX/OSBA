@@ -35,6 +35,6 @@ public class CacheableNodeDeque extends Container {
 	@Override
 	public void transform(ClassNode cn) {
 		FieldNode head = cn.getField(null, "L" + CLASS_MATCHES.get("CacheableNode") + ";");
-		addHook("getHead", head.name, cn.name, cn.name, head.desc, -1);
+		addHook("getHead", head.name, cn.name, cn.name, getUpdater().getContainer(CacheableNode.class).getDescriptor(), -1);
 	}
 }

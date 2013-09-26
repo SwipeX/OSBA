@@ -57,6 +57,6 @@ public class InteractableObject extends Container {
             addHook("getWorldY", worldy.name, worldy.owner, worldy.owner, worldy.desc, Multipliers.getMostUsed(worldy));
         }
 	    FieldNode renderable = cn.getField(null, "L" + CLASS_MATCHES.get("Renderable") + ";");
-	    addHook("getModel", renderable.name, cn.name, cn.name, renderable.desc, -1);
+	    addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Renderable.class).getDescriptor(), -1);
     }
 }

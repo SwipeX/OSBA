@@ -65,8 +65,8 @@ public class Widget extends Container {
 
 	@Override
 	public void transform(ClassNode cn) {
-		addHook("getMasterX", "masterx", cn.name, cn.name, "I", -1);
-		addHook("getMasterY", "mastery", cn.name, cn.name, "I", -1);
+		addHook("getMasterX", "masterX", cn.name, cn.name, "I", -1);
+		addHook("getMasterY", "masterY", cn.name, cn.name, "I", -1);
 		EntryPattern setters = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "Z"), new InsnEntry(Opcodes.PUTFIELD, "I"),
 				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
 				new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
@@ -75,9 +75,9 @@ public class Widget extends Container {
 		FieldNode parent = cn.getField(null, "L" + cn.name + ";", true);
 		FieldNode children = cn.getField(null, "[L" + cn.name + ";", true);
 		if (parent != null)
-			addHook("getParent", parent.name, cn.name, cn.name, parent.desc, -1);
+			addHook("getParent", parent.name, cn.name, cn.name, getDescriptor(), -1);
 		if (children != null)
-			addHook("getChildren", children.name, cn.name, cn.name, children.desc, -1);
+			addHook("getChildren", children.name, cn.name, cn.name, getDescriptor(1), -1);
 		if (setters.find(cn)) {
 			FieldInsnNode type = setters.get(2, FieldInsnNode.class);
 			FieldInsnNode x = setters.get(4, FieldInsnNode.class);

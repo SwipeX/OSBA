@@ -28,6 +28,17 @@ public abstract class Container extends Transform {
         return GETTER_PREFIX + "I" + getClass().getSimpleName();
     }
 
+	public String getDescriptor(int dimensions) {
+		String prefix = "";
+		for (int index = 0; index < dimensions; index++)
+			prefix += '[';
+		return prefix + "L" + getInterfaceString() + ";";
+	}
+
+	public String getDescriptor() {
+		return getDescriptor(0);
+	}
+
     public String getName(ClassNode cn) {
         return cn != null ? cn.name : null;
     }

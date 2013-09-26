@@ -52,11 +52,12 @@ public class ItemLayer extends Container {
 				FieldInsnNode mid = (FieldInsnNode) pattern.get(4).getInstance();
 				FieldInsnNode top = (FieldInsnNode) pattern.get(5).getInstance();
 				FieldInsnNode height = (FieldInsnNode) pattern.get(8).getInstance();
-				addHook("getBottomItem", bottom.name, bottom.owner, cn.name, bottom.desc, -1);
+				String renderDesc = getUpdater().getContainer(Renderable.class).getDescriptor();
+				addHook("getBottomItem", bottom.name, bottom.owner, cn.name, renderDesc, -1);
 				addHook("getX", x.name, x.owner, cn.name, x.desc, Multipliers.getMostUsed(x));
 				addHook("getY", y.name, y.owner, cn.name, y.desc, Multipliers.getMostUsed(y));
-				addHook("getMiddleItem", mid.name, mid.owner, cn.name, mid.desc, -1);
-				addHook("getTopItem", top.name, top.owner, cn.name, top.desc, -1);
+				addHook("getMiddleItem", mid.name, mid.owner, cn.name, renderDesc, -1);
+				addHook("getTopItem", top.name, top.owner, cn.name, renderDesc, -1);
 				addHook("getHeight", height.name, height.owner, cn.name, height.desc, Multipliers.getMostUsed(height));
 			}
 		}
