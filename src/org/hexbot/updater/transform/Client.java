@@ -302,9 +302,9 @@ public class Client extends Container {
             FieldInsnNode x = pattern.get(5, FieldInsnNode.class);
             addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
-            addHook("getCameraY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+            addHook("getCameraZ", y.name, y.owner, "client", "I", Multipliers.getBest(y));
             FieldInsnNode z = pattern.get(7, FieldInsnNode.class);
-            addHook("getCameraZ", z.name, z.owner, "client", "I", Multipliers.getBest(z));
+            addHook("getCameraY", z.name, z.owner, "client", "I", Multipliers.getBest(z));
         }
         /**
          * Have to include the atan2 before the last one so the updater wont miss it. (first 2 insn)

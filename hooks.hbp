@@ -138,8 +138,8 @@ $bh#org/hexbot/core/impl/IMouse
 @getBaseX,ck,am,I,client,-438639457,true
 @getBaseY,ch,dc,I,client,-1799171583,true
 @getCameraX,fp,h,I,client,842938897,true
-@getCameraY,fu,k,I,client,-2121897687,true
-@getCameraZ,fw,aq,I,client,1823689501,true
+@getCameraZ,fu,k,I,client,-2121897687,true
+@getCameraY,fw,aq,I,client,1823689501,true
 @getYaw,fm,z,I,client,-1626338603,true
 @getPitch,fh,eb,I,client,1348200983,true
 @getGameState,e,client,I,client,-378627179,true
