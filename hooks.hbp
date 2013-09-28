@@ -180,6 +180,12 @@ $bh#org/hexbot/core/impl/IMouse
 @getUID,di,fo,J,fo,-1,false
 @getPrevious,dp,fo,Lorg/hexbot/core/impl/INode;,fo,-1,false
 @getNext,ee,fo,Lorg/hexbot/core/impl/INode;,fo,-1,false
+@getBottomItem,o,cg,Lorg/hexbot/core/impl/IRenderable;,cg,-1,false
+@getX,v,cg,I,cg,-963362115,false
+@getY,i,cg,I,cg,1392834561,false
+@getMiddleItem,m,cg,Lorg/hexbot/core/impl/IRenderable;,cg,-1,false
+@getTopItem,l,cg,Lorg/hexbot/core/impl/IRenderable;,cg,-1,false
+@getHeight,g,cg,I,cg,-132951173,false
 @getModel,l,ch,Lorg/hexbot/core/impl/IRenderable;,ch,-1,false
 @getX,j,ch,I,ch,-1,false
 @getY,o,ch,I,ch,-1,false
