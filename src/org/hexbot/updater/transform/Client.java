@@ -9,6 +9,7 @@ import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -340,14 +341,19 @@ public class Client extends Container {
 			addHook("getSelectedName", selectedName, cn.name, -1);
 		}
 		if (selectedName != null) {
-			String selectedNameDesc = String.format("name:%s;owner:%s;", selectedName.name, selectedName.owner);
-			EntryPattern state = new EntryPattern(
-					new InsnEntry(Opcodes.GETSTATIC, "desc:I;owner:client;"),
-					new InsnEntry(Opcodes.GETSTATIC, selectedNameDesc)
-			);
-			if (state.find(cn)) {
-				FieldInsnNode selectionState = state.get(0, FieldInsnNode.class);
-				addHook("getSelectionState", selectionState, cn.name, Multipliers.getBest(selectionState));
+			for (MethodNode m : cn.methods) {
+				if (!Modifier.isStatic(m.access))
+					continue;
+				String selectedNameDesc = String.format("name:%s;owner:%s;", selectedName.name, selectedName.owner);
+				EntryPattern state = new EntryPattern(
+						new InsnEntry(Opcodes.GETSTATIC, "desc:I;owner:client;"),
+						new InsnEntry(Opcodes.GETSTATIC, selectedNameDesc)
+				);
+				if (state.find(m)) {
+					FieldInsnNode selectionState = state.get(0, FieldInsnNode.class);
+					addHook("getSelectionState", selectionState, cn.name, Multipliers.getBest(selectionState));
+					break;
+				}
 			}
 		}
 	}
