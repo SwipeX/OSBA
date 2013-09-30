@@ -46,14 +46,14 @@ public class FloorDecoration extends Container {
         }
 		String render = "L" + CLASS_MATCHES.get("Renderable") + ";";
 		FieldNode renderable = cn.getField(null, render);
-		addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Renderable.class).getDescriptor(), -1);
+		addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Model.class).getDescriptor(), -1);
 		EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, render, cn.name),
 				new InsnEntry(Opcodes.PUTFIELD, "I", cn.name), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
 		if (ep1.find(region)) {
 			FieldInsnNode x = (FieldInsnNode) ep1.get(1).getInstance();
 			FieldInsnNode y = (FieldInsnNode) ep1.get(2).getInstance();
-			addHook("getX", x.name, x.owner, cn.name, x.desc, -1);
-			addHook("getY", y.name, y.owner, cn.name, y.desc, -1);
+			addHook("getWorldX", x.name, x.owner, cn.name, x.desc, -1);
+			addHook("getWorldY", y.name, y.owner, cn.name, y.desc, -1);
 		}
 	}
 }

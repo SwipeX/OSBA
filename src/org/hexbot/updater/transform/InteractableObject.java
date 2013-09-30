@@ -42,21 +42,21 @@ public class InteractableObject extends Container {
         ClassNode region = updater.classnodes.get(CLASS_MATCHES.get("Region"));
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "[L" + cn.name + ";"), new InsnEntry(Opcodes.AALOAD), new InsnEntry(Opcodes.GETFIELD, "I"));
         if (ep1.find(region)) {
-	        FieldInsnNode id = (FieldInsnNode) ep1.get(2).getInstance();
+            FieldInsnNode id = (FieldInsnNode) ep1.get(2).getInstance();
             addHook("getId", id.name, id.owner, id.owner, id.desc, Multipliers.getBest(id));
         }
-        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.INVOKESPECIAL), new InsnEntry(Opcodes.PUTFIELD, "I"),
-                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
-                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"));
+        EntryPattern ep2 = new EntryPattern(new InsnEntry(Opcodes.INVOKESPECIAL),new InsnEntry(Opcodes.PUTFIELD, "I"),new InsnEntry(Opcodes.PUTFIELD, "I"),
+                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "L" + CLASS_MATCHES.get("Renderable") + ";"));
         if (ep2.find(region)) {
-	        FieldInsnNode worldx = (FieldInsnNode) ep2.get(4).getInstance();
-	        addHook("getWorldX", worldx.name, worldx.owner, worldx.owner, worldx.desc, Multipliers.getBest(worldx));
-	        FieldInsnNode height = (FieldInsnNode) ep2.get(6).getInstance();
-	        addHook("getHeight", height.name, height.owner, height.owner, height.desc, Multipliers.getBest(height));
-	        FieldInsnNode worldy = (FieldInsnNode) ep2.get(5).getInstance();
-            addHook("getWorldY", worldy.name, worldy.owner, worldy.owner, worldy.desc, Multipliers.getBest(worldy));
+            FieldInsnNode worldx = (FieldInsnNode) ep2.get(4).getInstance();
+            addHook("getWorldX", worldx.name, cn.name, cn.name, worldx.desc, Multipliers.getBest(worldx));
+            FieldInsnNode worldy = (FieldInsnNode) ep2.get(5).getInstance();
+            addHook("getWorldY", worldy.name, cn.name, cn.name, worldy.desc, Multipliers.getBest(worldy));
+            FieldInsnNode height = (FieldInsnNode) ep2.get(6).getInstance();
+            addHook("getHeight", height.name, cn.name, cn.name, height.desc, Multipliers.getBest(height));
         }
-	    FieldNode renderable = cn.getField(null, "L" + CLASS_MATCHES.get("Renderable") + ";");
-	    addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Renderable.class).getDescriptor(), -1);
+        FieldNode renderable = cn.getField(null, "L" + CLASS_MATCHES.get("Renderable") + ";");
+        addHook("getModel", renderable.name, cn.name, cn.name, getUpdater().getContainer(Model.class).getDescriptor(), -1);
     }
 }
