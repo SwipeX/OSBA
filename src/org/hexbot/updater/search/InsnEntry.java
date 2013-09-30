@@ -61,9 +61,38 @@ public class InsnEntry {
 		}
 		if (desc == null) return true;
 		if (ain instanceof FieldInsnNode) {
-			if (desc.equals(((FieldInsnNode) ain).desc)) {
-				return owner == null || ((FieldInsnNode) ain).owner.equals(owner);
+			/**
+			 * Check if has tags format, if not just compares to FieldInsnNode#desc
+			 *
+			 * Example: new InsnEntry(Opcodes.GETFIELD, "name:gg;owner:client;desc:I;");
+			 */
+			FieldInsnNode f = (FieldInsnNode) ain;
+			String[] tags = {"name:", "owner:", "desc:"};
+			boolean hasTag = false;
+			for (String tag : tags) {
+				if (desc.contains(tag)) {
+					hasTag = true;
+					String value = desc.split(tag)[1].split(";")[0];
+					switch (tag) {
+						case "name:":
+							if (!f.name.equals(value)) {
+								return false;
+							}
+							break;
+						case "owner:":
+							if (!f.owner.equals(value)) {
+								return false;
+							}
+							break;
+						case "desc:":
+							if (!f.desc.equals(value)) {
+								return false;
+							}
+							break;
+					}
+				}
 			}
+			return hasTag || desc.equals(f.desc);
 		} else if (ain instanceof MethodInsnNode) {
 			MethodInsnNode min = (MethodInsnNode) ain;
 			if ((min.name).equalsIgnoreCase(desc)) {
@@ -89,7 +118,7 @@ public class InsnEntry {
 		return false;
 	}
 
-	public boolean contained (MethodNode m) {
+	public boolean contained(MethodNode m) {
 		for (AbstractInsnNode node : m.instructions.toArray()) {
 			if (this.equals(node))
 				return true;
