@@ -19,7 +19,7 @@ public class ObjectDefinition extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 4;
+		return 3;
 	}
 
 	@Override
