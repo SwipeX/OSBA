@@ -51,7 +51,7 @@ public class ObjectDefinition extends Container {
 			for (MethodNode mn : c.methods) {
 				if ((mn.access & Opcodes.ACC_STATIC) != Opcodes.ACC_STATIC) continue;
 				if (mn.desc.equals("(I)L" + cn.name + ";")) {
-					addHook("getObjectDefinition", mn.name, c.name, c.name, mn.desc, -1);
+					addHook("getObjectDefinition*", mn.name, c.name, c.name, "method", -1);
 					break searcher;
 				}
 			}

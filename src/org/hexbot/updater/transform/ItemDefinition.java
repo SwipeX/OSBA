@@ -63,7 +63,7 @@ public class ItemDefinition extends Container {
 		    for (MethodNode mn : c.methods) {
 			    if ((mn.access & Opcodes.ACC_STATIC) != Opcodes.ACC_STATIC) continue;
 			    if (mn.desc.equals("(II)L" + cn.name + ";")) {
-				    addHook("getItemDefinition", mn.name, c.name, c.name, mn.desc, -1);
+				    addHook("getItemDefinition*", mn.name, c.name, c.name, "method", -1);
 				    break searcher;
 			    }
 		    }
