@@ -5,9 +5,7 @@ import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
@@ -19,7 +17,7 @@ public class ItemDefinition extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -60,6 +58,15 @@ public class ItemDefinition extends Container {
 	    if (ep2.find(cn)) {
 		    FieldInsnNode stacks = (FieldInsnNode) ep2.get(2).getInstance();
 		    addHook("getStacks", stacks.name, stacks.owner, cn.name, stacks.desc, -1);
+	    }
+	    searcher: for (ClassNode c : updater.classnodes.values()) {
+		    for (MethodNode mn : c.methods) {
+			    if ((mn.access & Opcodes.ACC_STATIC) != Opcodes.ACC_STATIC) continue;
+			    if (mn.desc.equals("(II)L" + cn.name + ";")) {
+				    addHook("getItemDefinition", mn.name, c.name, c.name, mn.desc, -1);
+				    break searcher;
+			    }
+		    }
 	    }
     }
 }

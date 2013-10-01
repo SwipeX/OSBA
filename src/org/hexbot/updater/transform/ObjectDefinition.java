@@ -7,6 +7,7 @@ import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class ObjectDefinition extends Container {
 
 	@Override
 	public int getTotalHookCount() {
-		return 2;
+		return 4;
 	}
 
 	@Override
@@ -45,5 +46,15 @@ public class ObjectDefinition extends Container {
             FieldInsnNode actions = ep3.get(1, FieldInsnNode.class);
             addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
         }
+
+		searcher: for (ClassNode c : updater.classnodes.values()) {
+			for (MethodNode mn : c.methods) {
+				if ((mn.access & Opcodes.ACC_STATIC) != Opcodes.ACC_STATIC) continue;
+				if (mn.desc.equals("(I)L" + cn.name + ";")) {
+					addHook("getObjectDefinition", mn.name, c.name, c.name, mn.desc, -1);
+					break searcher;
+				}
+			}
+		}
 	}
 }
