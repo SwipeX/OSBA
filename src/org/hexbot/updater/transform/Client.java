@@ -355,9 +355,9 @@ public class Client extends Container {
         EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[[B"), new InsnEntry(Opcodes.GETSTATIC, "[I"),
                 new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn)) {
-            FieldInsnNode x = pattern.get(5, FieldInsnNode.class);
+            FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
             addHook("getBaseX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
-            FieldInsnNode y = pattern.get(3, FieldInsnNode.class);
+            FieldInsnNode y = pattern.get(5, FieldInsnNode.class);
             addHook("getBaseY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
     }
