@@ -46,8 +46,8 @@ public class Boundary extends Container {
 		if (ep1.find(region)) {
 			FieldInsnNode x = (FieldInsnNode) ep1.get(1).getInstance();
 			FieldInsnNode y = (FieldInsnNode) ep1.get(2).getInstance();
-			addHook("getWorldX", x.name, x.owner, cn.name, x.desc, -1);
-			addHook("getWorldY", y.name, y.owner, cn.name, y.desc, -1);
+			addHook("getWorldX", x.name, cn.name, cn.name, x.desc, -1);
+			addHook("getWorldY", y.name, cn.name, cn.name, y.desc, -1);
 		}
 	}
 }

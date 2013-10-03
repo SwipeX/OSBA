@@ -45,9 +45,9 @@ public class Friend extends Container {
 			FieldInsnNode name = (FieldInsnNode) ep.get(0).getInstance();
 			FieldInsnNode prev = (FieldInsnNode) ep.get(1).getInstance();
 			FieldInsnNode world = (FieldInsnNode) ep.get(2).getInstance();
-			addHook("getName", name.name, name.owner, cn.name, name.desc, -1);
-			addHook("getPreviousName", prev.name, prev.owner, cn.name, prev.desc, -1);
-			addHook("getWorld", world.name, world.owner, cn.name, world.desc, -1);
+			addHook("getName", name.name,  cn.name, cn.name, name.desc, -1);
+			addHook("getPreviousName", prev.name,  cn.name, cn.name, prev.desc, -1);
+			addHook("getWorld", world.name,  cn.name, cn.name, world.desc, -1);
 		}
 	}
 
