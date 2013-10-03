@@ -149,6 +149,7 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.PUTSTATIC, "I"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I")
         );
+        search:
         for (MethodNode m : cn.methods) {
             if (new InsnEntry(IntInsnNode.class, "765").contained(m) && new InsnEntry(IntInsnNode.class, "503").contained(m))
                 if (pattern.find(m)) {
@@ -162,6 +163,7 @@ public class Client extends Container {
                     addHook("getMenuWidth", width.name, width.owner, "client", "I", Multipliers.getBest(width));
                     FieldInsnNode height = pattern.get(4, FieldInsnNode.class);
                     addHook("getMenuHeight", height.name, height.owner, "client", "I", Multipliers.getBest(height));
+                    break search;
                 }
         }
         getMenuCount();
@@ -319,15 +321,24 @@ public class Client extends Container {
     }
 
     public void getCamera() {
-        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "64"), new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.INVOKESTATIC),
-                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
-        if (pattern.find(cn)) {
-            FieldInsnNode x = pattern.get(5, FieldInsnNode.class);
-            addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
-            FieldInsnNode y = pattern.get(6, FieldInsnNode.class);
-            addHook("getCameraZ", y.name, y.owner, "client", "I", Multipliers.getBest(y));
-            FieldInsnNode z = pattern.get(7, FieldInsnNode.class);
-            addHook("getCameraY", z.name, z.owner, "client", "I", Multipliers.getBest(z));
+        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.INVOKESTATIC),
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"),
+                new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+        cam:
+        for (final ClassNode cn : updater.classnodes.values()) {
+            if (cn.name.equals("client"))
+                continue;
+            for (final MethodNode mn : cn.methods) {
+                if (pattern.find(mn)) {
+                    FieldInsnNode x = pattern.get(2, FieldInsnNode.class);
+                    addHook("getCameraX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
+                    FieldInsnNode y = pattern.get(3, FieldInsnNode.class);
+                    addHook("getCameraZ", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+                    FieldInsnNode z = pattern.get(4, FieldInsnNode.class);
+                    addHook("getCameraY", z.name, z.owner, "client", "I", Multipliers.getBest(z));
+                    break cam;
+                }
+            }
         }
         /**
          * Have to include the atan2 before the last one so the updater wont miss it. (first 2 insn)
