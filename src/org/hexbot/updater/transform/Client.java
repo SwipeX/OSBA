@@ -22,7 +22,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 41;
+        return 43;
     }
 
     @Override
@@ -149,7 +149,6 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.PUTSTATIC, "I"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I")
         );
-        search:
         for (MethodNode m : cn.methods) {
             if (new InsnEntry(IntInsnNode.class, "765").contained(m) && new InsnEntry(IntInsnNode.class, "503").contained(m))
                 if (pattern.find(m)) {
@@ -163,7 +162,7 @@ public class Client extends Container {
                     addHook("getMenuWidth", width.name, width.owner, "client", "I", Multipliers.getBest(width));
                     FieldInsnNode height = pattern.get(4, FieldInsnNode.class);
                     addHook("getMenuHeight", height.name, height.owner, "client", "I", Multipliers.getBest(height));
-                    break search;
+                    break;
                 }
         }
         getMenuCount();
@@ -230,8 +229,7 @@ public class Client extends Container {
                 if (test.owner.equals(index.owner)) {
                     addHook("getSettings", index.name, index.owner, "client", "[I", -1);
                     return;
-                } else
-                    continue;
+                }
             }
         }
     }
@@ -240,14 +238,13 @@ public class Client extends Container {
         // void logout()
         for (ClassNode cn : getUpdater().classnodes.values()) {
             EntryPattern pattern = new EntryPattern(
-                    new InsnEntry(IntInsnNode.class, "20"),
                     new InsnEntry(Opcodes.ICONST_0), new InsnEntry(Opcodes.PUTSTATIC, "I"), //login index
                     new InsnEntry(Opcodes.LDC, ""), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;"), // username
                     new InsnEntry(Opcodes.LDC, ""), new InsnEntry(Opcodes.PUTSTATIC, "Ljava/lang/String;")); // password
             if (pattern.find(cn)) {
-                FieldInsnNode loginIndex = pattern.get(2, FieldInsnNode.class);
-                FieldInsnNode username = pattern.get(4, FieldInsnNode.class);
-                FieldInsnNode password = pattern.get(6, FieldInsnNode.class);
+                FieldInsnNode loginIndex = pattern.get(1, FieldInsnNode.class);
+                FieldInsnNode username = pattern.get(3, FieldInsnNode.class);
+                FieldInsnNode password = pattern.get(5, FieldInsnNode.class);
                 addHook("getLoginIndex", loginIndex.name, loginIndex.owner, "client", "I", Multipliers.getBest(loginIndex));
                 addHook("getUsername", username.name, username.owner, "client", "Ljava/lang/String;", -1);
                 addHook("getPassword", password.name, password.owner, "client", "Ljava/lang/String;", -1);
