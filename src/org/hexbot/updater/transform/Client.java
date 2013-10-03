@@ -183,12 +183,12 @@ public class Client extends Container {
     private void destinationHooks() {
         EntryPattern pattern = new EntryPattern(
                 new InsnEntry(Opcodes.GETSTATIC, "L" + CLASS_MATCHES.get("Player") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"),
-                new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC), new InsnEntry(Opcodes.GETSTATIC, "I"));
+                new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.PUTSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn, "(Z)V")) {
             FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
-            addHook("getDestinationX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
+            addHook("getDestinationY", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(4, FieldInsnNode.class);
-            addHook("getDestinationY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+            addHook("getDestinationX", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         }
     }
 
