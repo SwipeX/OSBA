@@ -10,7 +10,9 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class Widget extends Container {
 
@@ -120,6 +122,9 @@ public class Widget extends Container {
 	public void locateInv(ClassNode cn, FieldInsnNode width, FieldInsnNode height) {
 		if (width == null || height == null) return;
 		int hook = 0;
+		List names = new Vector();
+		names.add(width.name);
+		names.add(height.name);
 		for (MethodNode mn : cn.methods) {
 			if (Modifier.isStatic(mn.access))
 				continue;
@@ -135,12 +140,12 @@ public class Widget extends Container {
 				}
 				switch (i) {
 					case 0:
-						if (f.getOpcode() == Opcodes.GETFIELD && f.name.equals(width.name)) {
+						if (f.getOpcode() == Opcodes.GETFIELD && names.contains(f.name)) {
 							i++;
 						} else i = 0;
 						break;
 					case 1:
-						if (f.getOpcode() == Opcodes.GETFIELD && f.name.equals(height.name)) {
+						if (f.getOpcode() == Opcodes.GETFIELD && names.contains(f.name)) {
 							i++;
 						} else i = 0;
 						break;
