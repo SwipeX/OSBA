@@ -101,7 +101,7 @@ public class Client extends Container {
             FieldInsnNode scale = pattern.get(1, FieldInsnNode.class);
             addHook("getMinimapScale", scale.name, scale.owner, "client", "I", Multipliers.getBest(scale));
             FieldInsnNode offest = pattern.get(6, FieldInsnNode.class);
-            addHook("getMinimapOfffset", offest.name, offest.owner, "client", "I", Multipliers.getBest(offest));
+            addHook("getMinimapOffset", offest.name, offest.owner, "client", "I", Multipliers.getBest(offest));
         }
     }
 
