@@ -298,11 +298,11 @@ public class Client extends Container {
     }
 
     public void getMenuCount() {
-        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "I"),
-                new InsnEntry(Opcodes.SIPUSH, "22207")
+        EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"),
+                new InsnEntry(Opcodes.GETSTATIC, "[I"),new InsnEntry(Opcodes.PUTSTATIC, "I")
         );
         if (pattern.find(cn)) {
-            FieldInsnNode index = pattern.get(0, FieldInsnNode.class);
+            FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
             addHook("getMenuCount", index.name, index.owner, "client", "I", Multipliers.getBest(index));
         }
     }
