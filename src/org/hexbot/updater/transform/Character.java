@@ -20,7 +20,7 @@ public class Character extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 14;
+        return 15;
     }
 
     @Override
@@ -113,6 +113,12 @@ public class Character extends Container {
             addHook("getQueueY", queue.get(4, FieldInsnNode.class), cn.name, -1);
             addHook("getQueueRun", queue.get(8, FieldInsnNode.class), cn.name, -1);
         }
+		EntryPattern speed = new EntryPattern(new InsnEntry(Opcodes.DUP), new InsnEntry(Opcodes.GETFIELD, "I", cn.name),
+				new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
+		if (speed.find(cn)) {
+			FieldInsnNode fin = (FieldInsnNode) speed.get(1).getInstance();
+			addHook("getSpeed", fin, cn.name, Multipliers.getBest(fin));
+		}
     }
 
 }
