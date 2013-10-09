@@ -406,7 +406,7 @@ public class Client extends Container {
 			FieldInsnNode count = (FieldInsnNode) ep.get(2).getInstance();
 			FieldInsnNode uids = (FieldInsnNode) ep.get(3).getInstance();
 			addHook("getOnCursorCount", count.name, count.owner, cn.name, count.desc, Multipliers.getBest(count));
-			addHook("getOnCursorUids", uids.name, uids.owner, cn.name, uids.desc, Multipliers.getBest(uids));
+			addHook("getOnCursorUids", uids.name, uids.owner, cn.name, uids.desc, -1);
 		}
 	}
 }
