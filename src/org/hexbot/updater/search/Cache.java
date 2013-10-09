@@ -27,6 +27,7 @@ public class Cache implements Opcodes {
             return -1;
         }
         if ((owner + "." + name).equals("ax.w")) return -1282680949;
+        if ((owner + "." + name).equals("ck.x")) return -1663925869;
         return multiplier.equals(ASMUtil.BAD_NUMBER) ? ASMUtil.BAD_NUMBER : multiplier.intValue();
     }
 

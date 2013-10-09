@@ -56,6 +56,11 @@ public class Character extends Container {
             FieldInsnNode anim = ep2.get(1, FieldInsnNode.class);
             addHook("getAnimation", anim.name, anim.owner, anim.owner, anim.desc, Multipliers.getBest(anim));
         }
+        EntryPattern epz = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"));
+        if (epz.find(cn, "(B)V")) {
+            FieldInsnNode queue = epz.get(0, FieldInsnNode.class);
+            addHook("getQueueSize", queue.name, queue.owner, queue.owner, queue.desc, Multipliers.getBest(queue));
+        }
 
         EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:"+cn.name+";"),
                 new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:"+cn.name+";"), new InsnEntry(Opcodes.AALOAD));
