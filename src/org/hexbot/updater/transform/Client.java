@@ -22,7 +22,7 @@ public class Client extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 45;
+        return 47;
     }
 
     @Override
@@ -84,6 +84,7 @@ public class Client extends Container {
         settings();
         selectionState();
 		cursorType();
+		cursorOn();
     }
 
     private void identifyMinimap() {
@@ -395,6 +396,17 @@ public class Client extends Container {
 		if (ep.find(cn)) {
 			FieldInsnNode fin = (FieldInsnNode) ep.get(3).getInstance();
 			addHook("getCursorState", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
+		}
+	}
+
+	public void cursorOn() {
+		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.ISTORE),
+				new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
+		if (ep.find(cn)) {
+			FieldInsnNode count = (FieldInsnNode) ep.get(2).getInstance();
+			FieldInsnNode uids = (FieldInsnNode) ep.get(3).getInstance();
+			addHook("getOnCursorCount", count.name, count.owner, cn.name, count.desc, Multipliers.getBest(count));
+			addHook("getOnCursorUids", uids.name, uids.owner, cn.name, uids.desc, Multipliers.getBest(uids));
 		}
 	}
 }
