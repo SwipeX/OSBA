@@ -28,6 +28,8 @@ public class Cache implements Opcodes {
         }
         if ((owner + "." + name).equals("ax.w")) return -1282680949;
         if ((owner + "." + name).equals("ck.x")) return -1663925869;
+        if ((owner + "." + name).equals("dd.x")) return 739471927;
+
         return multiplier.equals(ASMUtil.BAD_NUMBER) ? ASMUtil.BAD_NUMBER : multiplier.intValue();
     }
 
@@ -82,7 +84,11 @@ public class Cache implements Opcodes {
     }
 
     public static Number get(FieldInsnNode f) {
-        return get(f.owner, f.name);
+        Number a = get(f.owner, f.name);
+        if (a == ASMUtil.BAD_NUMBER) {
+
+        }
+        return a;
     }
 
 }
