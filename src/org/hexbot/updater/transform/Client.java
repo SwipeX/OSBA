@@ -83,8 +83,8 @@ public class Client extends Container {
         identifyLogin();
         settings();
         selectionState();
-		cursorType();
-		cursorOn();
+        cursorType();
+        cursorOn();
     }
 
     private void identifyMinimap() {
@@ -149,7 +149,8 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.PUTSTATIC, "I"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I"),
                 new InsnEntry(Opcodes.PUTSTATIC, "I"),
-                new InsnEntry(Opcodes.PUTSTATIC, "I")
+                new InsnEntry(Opcodes.PUTSTATIC, "I"),
+                new InsnEntry(Opcodes.RETURN)
         );
         for (MethodNode m : cn.methods) {
             if (new InsnEntry(IntInsnNode.class, "765").contained(m) && new InsnEntry(IntInsnNode.class, "503").contained(m))
@@ -174,12 +175,16 @@ public class Client extends Container {
         EntryPattern pattern = new EntryPattern(
                 new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"), new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"),
                 new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"), new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"));
-        if (pattern.find(cn, "(I)Ljava/lang/String;")) {
-            FieldInsnNode menuOptions = pattern.get(0, FieldInsnNode.class);
-            addHook("getMenuOptions", menuOptions.name, menuOptions.owner, "client", "[Ljava/lang/String;", -1);
-            FieldInsnNode menuActions = pattern.get(3, FieldInsnNode.class);
-            addHook("getMenuActions", menuActions.name, menuActions.owner, "client", "[Ljava/lang/String;", -1);
-        }
+        for (ClassNode c : updater.classnodes.values())
+            if (pattern.find(c)) {
+                FieldInsnNode menuOptions = pattern.get(0, FieldInsnNode.class);
+                if (!menuOptions.owner.equals("client"))
+                    continue;
+                addHook("getMenuOptions", menuOptions.name, menuOptions.owner, "client", "[Ljava/lang/String;", -1);
+                FieldInsnNode menuActions = pattern.get(3, FieldInsnNode.class);
+                addHook("getMenuActions", menuActions.name, menuActions.owner, "client", "[Ljava/lang/String;", -1);
+                return;
+            }
     }
 
     private void destinationHooks() {
@@ -191,6 +196,16 @@ public class Client extends Container {
             addHook("getDestinationY", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(4, FieldInsnNode.class);
             addHook("getDestinationX", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+        } else {
+            EntryPattern pattern2 = new EntryPattern(
+                    new InsnEntry(Opcodes.GETSTATIC, "L" + CLASS_MATCHES.get("Player") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"),
+                    new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
+            if (pattern2.find(cn, "(Z)V")) {
+                FieldInsnNode x = pattern2.get(3, FieldInsnNode.class);
+                addHook("getDestinationY", x.name, x.owner, "client", "I", Multipliers.getBest(x));
+                FieldInsnNode y = pattern2.get(4, FieldInsnNode.class);
+                addHook("getDestinationX", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+            }
         }
     }
 
@@ -301,7 +316,7 @@ public class Client extends Container {
 
     public void getMenuCount() {
         EntryPattern pattern = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "[Ljava/lang/String;"),
-                new InsnEntry(Opcodes.GETSTATIC, "[I"),new InsnEntry(Opcodes.PUTSTATIC, "I")
+                new InsnEntry(Opcodes.GETSTATIC, "[I"), new InsnEntry(Opcodes.PUTSTATIC, "I")
         );
         if (pattern.find(cn)) {
             FieldInsnNode index = pattern.get(2, FieldInsnNode.class);
@@ -389,24 +404,24 @@ public class Client extends Container {
         }
     }
 
-	public void cursorType() {
-		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.IMUL),
-				new InsnEntry(Opcodes.SIPUSH, "400"),
-				new InsnEntry(Opcodes.PUTSTATIC, "I"));
-		if (ep.find(cn)) {
-			FieldInsnNode fin = (FieldInsnNode) ep.get(3).getInstance();
-			addHook("getCursorState", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
-		}
-	}
+    public void cursorType() {
+        EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.IMUL),
+                new InsnEntry(Opcodes.SIPUSH, "400"),
+                new InsnEntry(Opcodes.PUTSTATIC, "I"));
+        if (ep.find(cn)) {
+            FieldInsnNode fin = (FieldInsnNode) ep.get(3).getInstance();
+            addHook("getCursorState", fin.name, fin.owner, cn.name, fin.desc, Multipliers.getBest(fin));
+        }
+    }
 
-	public void cursorOn() {
-		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.ISTORE),
-				new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
-		if (ep.find(cn)) {
-			FieldInsnNode count = (FieldInsnNode) ep.get(2).getInstance();
-			FieldInsnNode uids = (FieldInsnNode) ep.get(3).getInstance();
-			addHook("getOnCursorCount", count.name, count.owner, cn.name, count.desc, Multipliers.getBest(count));
-			addHook("getOnCursorUids", uids.name, uids.owner, cn.name, uids.desc, -1);
-		}
-	}
+    public void cursorOn() {
+        EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.ISTORE),
+                new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "[I"));
+        if (ep.find(cn)) {
+            FieldInsnNode count = (FieldInsnNode) ep.get(2).getInstance();
+            FieldInsnNode uids = (FieldInsnNode) ep.get(3).getInstance();
+            addHook("getOnCursorCount", count.name, count.owner, cn.name, count.desc, Multipliers.getBest(count));
+            addHook("getOnCursorUids", uids.name, uids.owner, cn.name, uids.desc, -1);
+        }
+    }
 }

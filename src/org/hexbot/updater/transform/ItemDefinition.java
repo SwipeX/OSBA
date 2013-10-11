@@ -1,12 +1,14 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.ASMUtil;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.transform.parent.Container;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.lang.reflect.Modifier;
 import java.util.Map;
 
 public class ItemDefinition extends Container {
@@ -37,14 +39,16 @@ public class ItemDefinition extends Container {
     public void transform(ClassNode cn) {
         EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.GETSTATIC, "Ljava/lang/String;"), new InsnEntry(Opcodes.PUTFIELD, "Ljava/lang/String;")
                 , new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"), new InsnEntry(Opcodes.PUTFIELD, "[Ljava/lang/String;"));
-        if (ep.find(cn)) {
-            FieldInsnNode name = ep.get(1, FieldInsnNode.class);
-            addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
-            FieldInsnNode actions = ep.get(2, FieldInsnNode.class);
-            addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
-            FieldInsnNode groundActions = ep.get(3, FieldInsnNode.class);
-            addHook("getGroundActions", groundActions.name, groundActions.owner, groundActions.owner, groundActions.desc, -1);
-        }
+        for (ClassNode c : updater.classnodes.values())
+            if (ep.find(c)) {
+                FieldInsnNode name = ep.get(1, FieldInsnNode.class);
+                addHook("getName", name.name, name.owner, name.owner, name.desc, -1);
+                FieldInsnNode actions = ep.get(2, FieldInsnNode.class);
+                addHook("getActions", actions.name, actions.owner, actions.owner, actions.desc, -1);
+                FieldInsnNode groundActions = ep.get(3, FieldInsnNode.class);
+                addHook("getGroundActions", groundActions.name, groundActions.owner, groundActions.owner, groundActions.desc, -1);
+                break;
+            }
         FieldNode members = cn.getField(null, "Z");
         addHook("isMembers", members.name, cn.name, cn.name, members.desc, -1);
         EntryPattern ep1 = new EntryPattern(new InsnEntry(Opcodes.ACONST_NULL),
@@ -59,11 +63,14 @@ public class ItemDefinition extends Container {
             FieldInsnNode stacks = (FieldInsnNode) ep2.get(2).getInstance();
             addHook("getStacks", stacks.name, stacks.owner, cn.name, stacks.desc, -1);
         }
-        for (MethodNode mn : updater.classnodes.get(CLASS_MATCHES.get("ItemDefinition")).methods) {
-            if ((mn.access & Opcodes.ACC_STATIC) != Opcodes.ACC_STATIC) continue;
-            if (mn.desc.equals("(I)L" + cn.name + ";")) {
-                addHook("getItemDefinition*", mn.name, CLASS_MATCHES.get("ItemDefinition"), CLASS_MATCHES.get("ItemDefinition"), "method", -1);
-                break;
+        for (ClassNode c : updater.classnodes.values()) {
+            for (MethodNode mn : c.methods) {
+                if (Modifier.isStatic(mn.access)) {
+                    if (mn.desc.equals("(II)L" + cn.name + ";")) {
+                        addHook("getItemDefinition*", mn.name, c.name, CLASS_MATCHES.get("ItemDefinition"), "method", -1);
+                        return;
+                    }
+                }
             }
         }
     }

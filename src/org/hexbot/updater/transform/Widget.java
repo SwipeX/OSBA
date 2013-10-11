@@ -20,7 +20,7 @@ public class Widget extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 23;
+        return 24;
     }
 
     @Override

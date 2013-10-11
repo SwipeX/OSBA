@@ -1,10 +1,7 @@
 package org.hexbot.updater.search;
 
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,28 +51,46 @@ public class Cache implements Opcodes {
                                 field = (FieldInsnNode) start;
                                 key = generateKey(field);
                                 multiplier = ASMUtil.getNumericalValue(start.getNext()).longValue();
-                            } else if (ASMUtil.isNumericalValue(current = start) && (current = current.getNext()).getOpcode() == GETSTATIC
+                                if (key == null || multiplier == null || (multiplier.longValue() <= Short.MAX_VALUE && multiplier.longValue() >= Short.MIN_VALUE)
+                                        || (field.desc.equals("I") && (multiplier.longValue() > Integer.MAX_VALUE && multiplier.longValue() < Integer.MIN_VALUE))) {
+                                    continue;
+                                }
+                                cache.put(key, multiplier);
+                            }
+                            if (ASMUtil.isNumericalValue(current = start) && (current = current.getNext()).getOpcode() == GETSTATIC
                                     && ((current = current.getNext()).getOpcode() == IMUL || current.getOpcode() == LMUL)) {
                                 field = (FieldInsnNode) start.getNext();
                                 key = generateKey(field);
                                 multiplier = ASMUtil.getNumericalValue(start).longValue();
-                            } else if ((current = start).getOpcode() == GETFIELD && ASMUtil.isNumericalValue(current = current.getNext())
+                                if (key == null || multiplier == null || (multiplier.longValue() <= Short.MAX_VALUE && multiplier.longValue() >= Short.MIN_VALUE)
+                                        || (field.desc.equals("I") && (multiplier.longValue() > Integer.MAX_VALUE && multiplier.longValue() < Integer.MIN_VALUE))) {
+                                    continue;
+                                }
+                                cache.put(key, multiplier);
+                            }
+                            if ((current = start).getOpcode() == GETFIELD && ASMUtil.isNumericalValue(current = current.getNext())
                                     && ((current = current.getNext()).getOpcode() == IMUL || current.getOpcode() == LMUL)) {
                                 field = (FieldInsnNode) start;
                                 key = generateKey(field);
                                 multiplier = ASMUtil.getNumericalValue(start.getNext()).longValue();
-                            } else if (ASMUtil.isNumericalValue(current = start) && (current = current.getNext()).getOpcode() == ALOAD
+                                if (key == null || multiplier == null || (multiplier.longValue() <= Short.MAX_VALUE && multiplier.longValue() >= Short.MIN_VALUE)
+                                        || (field.desc.equals("I") && (multiplier.longValue() > Integer.MAX_VALUE && multiplier.longValue() < Integer.MIN_VALUE))) {
+                                    continue;
+                                }
+                                cache.put(key, multiplier);
+                            }
+                            if ((current = start) instanceof LdcInsnNode && (current = current.getNext()).getOpcode() == ALOAD
                                     && (current = current.getNext()).getOpcode() == GETFIELD && ((current = current.getNext()).getOpcode() == IMUL || current.getOpcode() == LMUL)) {
-                                //TODO this pattern needs to be improved to allow for array loading among other situations
                                 field = (FieldInsnNode) current.getPrevious();
                                 key = generateKey(field);
                                 multiplier = ASMUtil.getNumericalValue(start).longValue();
+                                if (key == null || multiplier == null || (multiplier.longValue() <= Short.MAX_VALUE && multiplier.longValue() >= Short.MIN_VALUE)
+                                        || (field.desc.equals("I") && (multiplier.longValue() > Integer.MAX_VALUE && multiplier.longValue() < Integer.MIN_VALUE))) {
+                                    continue;
+                                }
+                                cache.put(key, multiplier);
                             }
-                            if (key == null || multiplier == null || (multiplier.longValue() <= Short.MAX_VALUE && multiplier.longValue() >= Short.MIN_VALUE)
-                                    || (field.desc.equals("I") && (multiplier.longValue() > Integer.MAX_VALUE && multiplier.longValue() < Integer.MIN_VALUE))) {
-                                continue;
-                            }
-                            cache.put(key, multiplier);
+
                         }
                     }
                 }

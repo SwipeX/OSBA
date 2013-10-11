@@ -9,6 +9,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class Character extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 15;
+        return 16;
     }
 
     @Override
@@ -60,13 +61,17 @@ public class Character extends Container {
         if (epz.find(cn, "(B)V")) {
             FieldInsnNode queue = epz.get(0, FieldInsnNode.class);
             addHook("getQueueSize", queue.name, queue.owner, queue.owner, queue.desc, Multipliers.getBest(queue));
+        }   else if(epz.find(cn, "(I)V"))  {
+            FieldInsnNode queue = epz.get(0, FieldInsnNode.class);
+            addHook("getQueueSize", queue.name, queue.owner, queue.owner, queue.desc, Multipliers.getBest(queue));
         }
 
-        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:"+cn.name+";"),
-                new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:"+cn.name+";"), new InsnEntry(Opcodes.AALOAD));
-        ep3.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";I)V");
-        FieldInsnNode index = ep3.get(3, FieldInsnNode.class);
-        addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, Multipliers.getBest(index));
+        EntryPattern ep3 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + cn.name + ";"),
+                new InsnEntry(Opcodes.GETSTATIC, "[L" + CLASS_MATCHES.get("Npc") + ";"), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + cn.name + ";"), new InsnEntry(Opcodes.AALOAD));
+        if (ep3.find(updater.classnodes.get("client"))) {
+            FieldInsnNode index = ep3.get(3, FieldInsnNode.class);
+            addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, Multipliers.getBest(index));
+        }
 
         EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN));
         ep4.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";)V");
@@ -77,9 +82,9 @@ public class Character extends Container {
         EntryPattern ep5 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + CLASS_MATCHES.get("Character") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.IDIV));
         if (ep5.find(updater.classnodes.get("client"))) {
             FieldInsnNode hp = ep5.get(1, FieldInsnNode.class);
-            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, Multipliers.getBest(hp));
+            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, (Integer) ((LdcInsnNode)hp.getPrevious().getPrevious()).cst);
             FieldInsnNode max = ep5.get(2, FieldInsnNode.class);
-            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, Multipliers.getBest(max));
+            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, (Integer) ((LdcInsnNode)max.getPrevious().getPrevious()).cst);
         }
         EntryPattern hits = new EntryPattern(
                 new InsnEntry(Opcodes.GETFIELD, "[I"),
@@ -113,12 +118,12 @@ public class Character extends Container {
             addHook("getQueueY", queue.get(4, FieldInsnNode.class), cn.name, -1);
             addHook("getQueueRun", queue.get(8, FieldInsnNode.class), cn.name, -1);
         }
-		EntryPattern speed = new EntryPattern(new InsnEntry(Opcodes.DUP), new InsnEntry(Opcodes.GETFIELD, "I", cn.name),
-				new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
-		if (speed.find(cn)) {
-			FieldInsnNode fin = (FieldInsnNode) speed.get(1).getInstance();
-			addHook("getSpeed", fin, cn.name, Multipliers.getBest(fin));
-		}
+        EntryPattern speed = new EntryPattern(new InsnEntry(Opcodes.DUP), new InsnEntry(Opcodes.GETFIELD, "I", cn.name),
+                new InsnEntry(Opcodes.IADD), new InsnEntry(Opcodes.PUTFIELD, "I", cn.name));
+        if (speed.find(cn)) {
+            FieldInsnNode fin = (FieldInsnNode) speed.get(1).getInstance();
+            addHook("getSpeed", fin, cn.name, Multipliers.getBest(fin));
+        }
     }
 
 }
