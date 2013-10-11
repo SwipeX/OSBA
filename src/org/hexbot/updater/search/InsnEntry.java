@@ -85,7 +85,7 @@ public class InsnEntry {
 							}
 							break;
 						case "desc:":
-							if (!f.desc.equals(value)) {
+							if (!f.desc.equals(value) && !f.desc.equals(value+";")) {
 								return false;
 							}
 							break;

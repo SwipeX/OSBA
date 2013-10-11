@@ -50,5 +50,14 @@ public class WallDecoration extends Container {
             addHook("getWorldX", x.name, x.owner, cn.name, x.desc, Multipliers.getBest(x));
             addHook("getWorldY", y.name, y.owner, cn.name, y.desc, Multipliers.getBest(y));
         }
+        String render = "L" + CLASS_MATCHES.get("Renderable") + ";";
+        EntryPattern model = new EntryPattern(
+                new InsnEntry(Opcodes.GETFIELD, "desc:" + render + "owner:" + cn.name + ";"),
+                new InsnEntry(Opcodes.PUTFIELD, render));
+
+        if (model.find(updater.classnodes.get("client"))) {
+            FieldInsnNode fin = model.get(1, FieldInsnNode.class);
+            addHook("getModel", fin.name, fin.owner, cn.name, getUpdater().getContainer(Model.class).getDescriptor(), -1);
+        }
     }
 }

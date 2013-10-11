@@ -57,8 +57,9 @@ public class Boundary extends Container {
             addHook("getId", hits.get(0, FieldInsnNode.class), cn.name, Multipliers.getBest(hits.get(0, FieldInsnNode.class)));
         }
         EntryPattern model = new EntryPattern(
-                new InsnEntry(Opcodes.GETFIELD,  render ),
-                new InsnEntry(Opcodes.PUTFIELD, render ));
+                new InsnEntry(Opcodes.GETFIELD, "desc:" + render + "owner:" + cn.name + ";"),
+                new InsnEntry(Opcodes.PUTFIELD, render));
+
 
         if (model.find(updater.classnodes.get("client"))) {
             FieldInsnNode fin = model.get(1, FieldInsnNode.class);

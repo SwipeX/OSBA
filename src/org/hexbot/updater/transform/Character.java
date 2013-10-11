@@ -61,7 +61,7 @@ public class Character extends Container {
         if (epz.find(cn, "(B)V")) {
             FieldInsnNode queue = epz.get(0, FieldInsnNode.class);
             addHook("getQueueSize", queue.name, queue.owner, queue.owner, queue.desc, Multipliers.getBest(queue));
-        }   else if(epz.find(cn, "(I)V"))  {
+        } else if (epz.find(cn, "(I)V")) {
             FieldInsnNode queue = epz.get(0, FieldInsnNode.class);
             addHook("getQueueSize", queue.name, queue.owner, queue.owner, queue.desc, Multipliers.getBest(queue));
         }
@@ -73,18 +73,18 @@ public class Character extends Container {
             addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, Multipliers.getBest(index));
         }
 
-        EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.RETURN));
+        EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.INVOKESTATIC, "atan2"),new InsnEntry(Opcodes.PUTFIELD,"I"));
         ep4.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";)V");
-        FieldInsnNode orientation = ep4.get(0, FieldInsnNode.class);
+        FieldInsnNode orientation = ep4.get(1, FieldInsnNode.class);
         addHook("getOrientation", orientation.name, orientation.owner, CLASS_MATCHES.get("Character"), orientation.desc,
                 Multipliers.getBest(orientation));
 
         EntryPattern ep5 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + CLASS_MATCHES.get("Character") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.IDIV));
         if (ep5.find(updater.classnodes.get("client"))) {
             FieldInsnNode hp = ep5.get(1, FieldInsnNode.class);
-            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, (Integer) ((LdcInsnNode)hp.getPrevious().getPrevious()).cst);
+            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, (Integer) ((LdcInsnNode) hp.getPrevious().getPrevious()).cst);
             FieldInsnNode max = ep5.get(2, FieldInsnNode.class);
-            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, (Integer) ((LdcInsnNode)max.getPrevious().getPrevious()).cst);
+            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, (Integer) ((LdcInsnNode) max.getPrevious().getPrevious()).cst);
         }
         EntryPattern hits = new EntryPattern(
                 new InsnEntry(Opcodes.GETFIELD, "[I"),
