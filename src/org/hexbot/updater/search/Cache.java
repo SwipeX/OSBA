@@ -27,7 +27,8 @@ public class Cache implements Opcodes {
         if ((owner + "." + name).equals("ck.x")) return -1663925869;
         if ((owner + "." + name).equals("dd.x")) return 739471927;
         if ((owner + "." + name).equals("cs.u")) return 1748849565;
-
+        if ((owner + "." + name).equals("fh.at")) return 1669656749;
+        if ((owner + "." + name).equals("fh.ax")) return -1880121411;
         return multiplier.equals(ASMUtil.BAD_NUMBER) ? ASMUtil.BAD_NUMBER : multiplier.intValue();
     }
 
@@ -92,7 +93,7 @@ public class Cache implements Opcodes {
                                 cache.put(key, multiplier);
                             }
                             if ((current = start).getOpcode() == ALOAD
-                                    && (current = current.getNext()).getOpcode() == GETFIELD && (current = current.getNext()) instanceof LdcInsnNode&& ((current = current.getNext()).getOpcode() == IMUL || current.getOpcode() == LMUL)) {
+                                    && (current = current.getNext()).getOpcode() == GETFIELD && (current = current.getNext()) instanceof LdcInsnNode && ((current = current.getNext()).getOpcode() == IMUL || current.getOpcode() == LMUL)) {
                                 field = (FieldInsnNode) start.getNext();
                                 key = generateKey(field);
                                 multiplier = ASMUtil.getNumericalValue(current.getPrevious()).longValue();
