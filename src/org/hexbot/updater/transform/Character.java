@@ -1,6 +1,7 @@
 package org.hexbot.updater.transform;
 
 import org.hexbot.updater.Updater;
+import org.hexbot.updater.search.Cache;
 import org.hexbot.updater.search.EntryPattern;
 import org.hexbot.updater.search.InsnEntry;
 import org.hexbot.updater.search.Multipliers;
@@ -73,18 +74,20 @@ public class Character extends Container {
             addHook("getInteractingIndex", index.name, index.owner, CLASS_MATCHES.get("Character"), index.desc, Multipliers.getBest(index));
         }
 
-        EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.INVOKESTATIC, "atan2"),new InsnEntry(Opcodes.PUTFIELD,"I"));
-        ep4.find(updater.classnodes.get("client"), "(L" + CLASS_MATCHES.get("Character") + ";)V");
-        FieldInsnNode orientation = ep4.get(1, FieldInsnNode.class);
-        addHook("getOrientation", orientation.name, orientation.owner, CLASS_MATCHES.get("Character"), orientation.desc,
-                Multipliers.getBest(orientation));
-
+        EntryPattern ep4 = new EntryPattern(new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + cn.name + ";"),new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + cn.name + ";"), new InsnEntry(Opcodes.SIPUSH,"2047"));
+        if (ep4.find(updater.classnodes.get("client"),"(L"+cn.name+";)V")) {
+            FieldInsnNode orientation = ep4.get(1, FieldInsnNode.class);
+            addHook("getOrientation", orientation.name, orientation.owner, CLASS_MATCHES.get("Character"), orientation.desc,
+                    -650136929);
+        }
         EntryPattern ep5 = new EntryPattern(new InsnEntry(Opcodes.ICONST_M1), new InsnEntry(Opcodes.GETFIELD, "desc:I;owner:" + CLASS_MATCHES.get("Character") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.IDIV));
         if (ep5.find(updater.classnodes.get("client"))) {
             FieldInsnNode hp = ep5.get(1, FieldInsnNode.class);
-            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, (Integer) ((LdcInsnNode) hp.getPrevious().getPrevious()).cst);
+//            Cache.cache.put(hp.owner + "." + hp.name, (Integer) ((LdcInsnNode) hp.getPrevious().getPrevious()).cst);
+            addHook("getHealth", hp.name, hp.owner, hp.owner, hp.desc, Multipliers.getBest(hp));
             FieldInsnNode max = ep5.get(2, FieldInsnNode.class);
-            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, (Integer) ((LdcInsnNode) max.getPrevious().getPrevious()).cst);
+            //    Cache.cache.put(max.owner + "." + max.name, (Integer) ((LdcInsnNode) max.getPrevious().getPrevious()).cst);
+            addHook("getMaxHealth", max.name, max.owner, max.owner, max.desc, Multipliers.getBest(max));
         }
         EntryPattern hits = new EntryPattern(
                 new InsnEntry(Opcodes.GETFIELD, "[I"),

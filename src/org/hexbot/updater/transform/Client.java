@@ -98,11 +98,11 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.GETSTATIC, "I")
         );
         if (pattern.find(cn)) {
-            FieldInsnNode compass = pattern.get(0, FieldInsnNode.class);
+            FieldInsnNode compass = pattern.get(1, FieldInsnNode.class);
             addHook("getCompassAngle", compass.name, compass.owner, "client", "I", Multipliers.getBest(compass));
-            FieldInsnNode scale = pattern.get(1, FieldInsnNode.class);
+            FieldInsnNode scale = pattern.get(6, FieldInsnNode.class);
             addHook("getMinimapScale", scale.name, scale.owner, "client", "I", Multipliers.getBest(scale));
-            FieldInsnNode offest = pattern.get(6, FieldInsnNode.class);
+            FieldInsnNode offest = pattern.get(0, FieldInsnNode.class);
             addHook("getMinimapOffset", offest.name, offest.owner, "client", "I", Multipliers.getBest(offest));
         }
     }
@@ -180,9 +180,9 @@ public class Client extends Container {
                 FieldInsnNode menuOptions = pattern.get(0, FieldInsnNode.class);
                 if (!menuOptions.owner.equals("client"))
                     continue;
-                addHook("getMenuOptions", menuOptions.name, menuOptions.owner, "client", "[Ljava/lang/String;", -1);
+                addHook("getMenuActions", menuOptions.name, menuOptions.owner, "client", "[Ljava/lang/String;", -1);
                 FieldInsnNode menuActions = pattern.get(3, FieldInsnNode.class);
-                addHook("getMenuActions", menuActions.name, menuActions.owner, "client", "[Ljava/lang/String;", -1);
+                addHook("getMenuOptions", menuActions.name, menuActions.owner, "client", "[Ljava/lang/String;", -1);
                 return;
             }
     }
@@ -193,9 +193,9 @@ public class Client extends Container {
                 new InsnEntry(Opcodes.BIPUSH, "7"), new InsnEntry(Opcodes.GETSTATIC, "I"), new InsnEntry(Opcodes.PUTSTATIC, "I"), new InsnEntry(Opcodes.GETSTATIC, "I"));
         if (pattern.find(cn, "(Z)V")) {
             FieldInsnNode x = pattern.get(3, FieldInsnNode.class);
-            addHook("getDestinationY", x.name, x.owner, "client", "I", Multipliers.getBest(x));
+            addHook("getDestinationX", x.name, x.owner, "client", "I", Multipliers.getBest(x));
             FieldInsnNode y = pattern.get(4, FieldInsnNode.class);
-            addHook("getDestinationX", y.name, y.owner, "client", "I", Multipliers.getBest(y));
+            addHook("getDestinationY", y.name, y.owner, "client", "I", Multipliers.getBest(y));
         } else {
             EntryPattern pattern2 = new EntryPattern(
                     new InsnEntry(Opcodes.GETSTATIC, "L" + CLASS_MATCHES.get("Player") + ";"), new InsnEntry(Opcodes.GETFIELD, "I"),

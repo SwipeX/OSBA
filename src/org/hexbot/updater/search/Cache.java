@@ -20,15 +20,12 @@ public class Cache implements Opcodes {
 
     public static Number get(String owner, String name) {
         Number multiplier = cache.get(owner + "." + name);
+        if ((owner + "." + name).equals("cd.r")) return 1991856049;
+        if ((owner + "." + name).equals("ff.at")) return -156425695;
+        if ((owner + "." + name).equals("c.cv")) return -1364280751;
         if (multiplier == null) {
             return -1;
         }
-        if ((owner + "." + name).equals("ax.w")) return -1282680949;
-        if ((owner + "." + name).equals("ck.x")) return -1663925869;
-        if ((owner + "." + name).equals("dd.x")) return 739471927;
-        if ((owner + "." + name).equals("cs.u")) return 1748849565;
-        if ((owner + "." + name).equals("fh.at")) return 1669656749;
-        if ((owner + "." + name).equals("fh.ax")) return -1880121411;
         return multiplier.equals(ASMUtil.BAD_NUMBER) ? ASMUtil.BAD_NUMBER : multiplier.intValue();
     }
 
