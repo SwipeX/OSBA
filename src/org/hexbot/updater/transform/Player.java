@@ -40,6 +40,7 @@ public class Player extends Container {
 		addHook("getName", name.name, cn.name, cn.name, name.desc, -1);
 		FieldNode def = cn.getField(null, "L" + CLASS_MATCHES.get("PlayerDefinition") + ";");
 		addHook("getDefinition", def.name, cn.name, cn.name, getUpdater().getContainer(PlayerDefinition.class).getDescriptor(), -1);
+
 		EntryPattern ep = new EntryPattern(new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.PUTFIELD, "I"),
 				new InsnEntry(Opcodes.GETFIELD, "L" + CLASS_MATCHES.get("PlayerDefinition") + ";"));
 		if (ep.find(cn)) {

@@ -65,5 +65,6 @@ public class Boundary extends Container {
             FieldInsnNode fin = model.get(1, FieldInsnNode.class);
             addHook("getModel", fin.name, fin.owner, cn.name, getUpdater().getContainer(Model.class).getDescriptor(), -1);
         }
+
     }
 }

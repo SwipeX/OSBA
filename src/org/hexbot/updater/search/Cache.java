@@ -21,8 +21,7 @@ public class Cache implements Opcodes {
     public static Number get(String owner, String name) {
         Number multiplier = cache.get(owner + "." + name);
         if ((owner + "." + name).equals("cd.r")) return 1991856049;
-        if ((owner + "." + name).equals("ff.at")) return -156425695;
-        if ((owner + "." + name).equals("c.cv")) return -1364280751;
+
         if (multiplier == null) {
             return -1;
         }

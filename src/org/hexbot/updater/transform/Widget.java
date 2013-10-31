@@ -72,10 +72,10 @@ public class Widget extends Container {
     }
 
     private void locateModel(ClassNode cn) {
-        EntryPattern zep = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "6"), new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.INVOKEVIRTUAL),
-                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "I"), new InsnEntry(Opcodes.RETURN));
+        EntryPattern zep = new EntryPattern(new InsnEntry(Opcodes.BIPUSH, "6"), new InsnEntry(Opcodes.PUTFIELD, "I"),
+                new InsnEntry(Opcodes.PUTFIELD, "I"), new InsnEntry(Opcodes.GETFIELD, "I"));
         if (zep.find(cn)) {
-            FieldInsnNode model = (FieldInsnNode) zep.get(4).getInstance();
+            FieldInsnNode model = (FieldInsnNode) zep.get(3).getInstance();
             addHook("getModelId", model.name, model.owner, cn.name, model.desc, Multipliers.getBest(model));
         }
     }

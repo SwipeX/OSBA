@@ -20,7 +20,7 @@ public class WallDecoration extends Container {
 
     @Override
     public int getTotalHookCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -50,6 +50,7 @@ public class WallDecoration extends Container {
             addHook("getWorldX", x.name, x.owner, cn.name, x.desc, Multipliers.getBest(x));
             addHook("getWorldY", y.name, y.owner, cn.name, y.desc, Multipliers.getBest(y));
         }
+
         String render = "L" + CLASS_MATCHES.get("Renderable") + ";";
         EntryPattern model = new EntryPattern(
                 new InsnEntry(Opcodes.GETFIELD, "desc:" + render + "owner:" + cn.name + ";"),
